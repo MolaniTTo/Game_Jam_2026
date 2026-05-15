@@ -3,13 +3,14 @@ using UnityEngine;
 public class ChangeColor : MonoBehaviour
 {
     public Material lagartoMat;
+    public Material scultureMat;
     public Color otherColor;
     public string otherColorName;
 
 
     void Start()
     {
-
+        otherColor = Color.green;
     }
 
     // Update is called once per frame
@@ -20,7 +21,7 @@ public class ChangeColor : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<ColorTerra>() != null)
+        if (other.gameObject.GetComponent<ColorTerra>() != null && gameObject.CompareTag("sargantana"))
         {
             otherColor = other.gameObject.GetComponent<ColorTerra>().colorSO.color; //agafa el color del objeto que ha colisionado
             otherColorName = other.gameObject.GetComponent<ColorTerra>().colorSO.colorName; //agafa el nombre del color del objeto que ha colisionado
@@ -28,8 +29,13 @@ public class ChangeColor : MonoBehaviour
         }
     }
 
-    public string GetCurrentColor()
+    public Color GetCurrentColor()
     {
-        return otherColorName; //retorna el nombre del color actual del lagarto
+        return otherColor; //retorna el nombre del color actual del lagarto
+    }
+
+    public void ChangeColorSculture(Color newColor)
+    {
+        scultureMat.color = newColor; 
     }
 }
