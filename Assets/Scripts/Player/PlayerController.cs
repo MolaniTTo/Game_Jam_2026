@@ -19,11 +19,14 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private Vector3 moveDirection;
     private bool isGrounded;
+    public bool isOnPaintZone = false;
     private float verticalRotation = 0f;
+    [SerializeField] private ColorPicked colorPicked; // Referencia al script del color que agafem la sargantana
 
     [Header("PickupSargantana")]
     [SerializeField] float pickupRange;
     [SerializeField] LayerMask pickupLayerMask;
+    [SerializeField] LayerMask scultureMask;
     private MeshRenderer sargantanaMeshRenderer;
     public bool sargantanaAgafada = false;
     public ParticleSystem particulesSargantana;
@@ -61,16 +64,25 @@ public class PlayerController : MonoBehaviour
         HandleMovementInput();
         CheckGround();
 
-        if (!sargantanaAgafada && Mouse.current.leftButton.wasPressedThisFrame)
+        if (Mouse.current.leftButton.wasPressedThisFrame) //si clica el boto esquerre
         {
             Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
-            RaycastHit hit;
+            RaycastHit hit; //tira un raig
 
-            if (Physics.Raycast(ray, out hit, pickupRange, pickupLayerMask))
+            if (Physics.Raycast(ray, out hit, pickupRange, pickupLayerMask) && !sargantanaAgafada) //si el raig colisiona con un objeto dentro del rango y en la capa correcta
             {
                 if (hit.collider.CompareTag("sargantana"))
                 {
                     Debug.Log("Recojer");
+
+                    Drac drac = hit.collider.gameObject.GetComponent<Drac>();
+                    
+
+                    if (drac != null)
+                    {
+                        colorPicked.DragonPicked(drac);
+                    }
+
                     Recollir(hit.collider.gameObject);
                 }
                 else
@@ -78,8 +90,21 @@ public class PlayerController : MonoBehaviour
                     Debug.Log("El objeto no es recogible: " + hit.collider.name);
                 }
             }
-        } 
-        else if (Mouse.current.leftButton.wasPressedThisFrame)
+            if (Physics.Raycast(ray, out hit, pickupRange, scultureMask) && sargantanaAgafada && isOnPaintZone)
+            {
+                if (hit.collider.CompareTag("sculture"))
+                {
+                    ChangeColor changeColor = hit.collider.gameObject.GetComponent<ChangeColor>();
+
+                    if (changeColor != null)
+                    {
+                        changeColor.ChangeColorSculture(colorPicked.currentColor);
+                        Soltar();
+                    }
+                }
+            }
+        }
+        else if (Mouse.current.leftButton.wasPressedThisFrame && !isOnPaintZone) // Si el jugador hace clic izquierdo mientras no está en una zona de pintura, suelta la sargantana
         {
             Soltar();
         }
@@ -178,5 +203,21 @@ public class PlayerController : MonoBehaviour
     private void LateUpdate()
     {
         UpdateCursorLock();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("PaintZone"))
+        {
+            isOnPaintZone = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("PaintZone"))
+        {
+            isOnPaintZone = false;
+        }
     }
 }
