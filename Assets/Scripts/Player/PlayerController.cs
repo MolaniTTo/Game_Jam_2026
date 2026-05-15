@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -27,6 +29,10 @@ public class PlayerController : MonoBehaviour
     private MeshRenderer sargantanaMeshRenderer;
     public bool sargantanaAgafada = false;
     public ParticleSystem particulesSargantana;
+
+    [SerializeField] Image PunteroImage;
+    [SerializeField] Sprite puntero1;
+    [SerializeField] Sprite puntero2;
 
     private void Start()
     {
@@ -61,6 +67,7 @@ public class PlayerController : MonoBehaviour
         HandleMovementInput();
         CheckGround();
 
+
         if (!sargantanaAgafada && Mouse.current.leftButton.wasPressedThisFrame)
         {
             Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
@@ -90,6 +97,23 @@ public class PlayerController : MonoBehaviour
         // Aplicar movimiento en FixedUpdate para física coherente
         ApplyMovement();
         ApplyGravity();
+        CheckFrontalObject();
+    }
+
+    private void CheckFrontalObject()
+    {
+        PunteroImage.sprite = puntero1;
+
+        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, pickupRange, pickupLayerMask))
+        {
+            if (hit.collider.CompareTag("sargantana"))
+            {
+                PunteroImage.sprite = puntero2;
+            }
+        }
     }
 
     private void Recollir(GameObject sargantanaGameObject)
@@ -158,25 +182,5 @@ public class PlayerController : MonoBehaviour
             // Resetear velocidad vertical si está en el suelo y cayendo
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
         }
-    }
-
-    // Opcional: liberar cursor con Escape
-    private void UpdateCursorLock()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else if (Input.GetMouseButtonDown(0) && Cursor.lockState == CursorLockMode.None)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-    }
-
-    private void LateUpdate()
-    {
-        UpdateCursorLock();
     }
 }
