@@ -15,10 +15,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float verticalLookLimit = 80f;
 
     [Header("References")]
-    [SerializeField] private Camera playerCamera; // Asignar la cámara desde el inspector
     private Rigidbody rb;
     private Vector3 moveDirection;
     private bool isGrounded;
+    public bool tutorialDone = false;
     public bool isOnPaintZone = false;
     private float verticalRotation = 0f;
     [SerializeField] private ColorPicked colorPicked; // Referencia al script del color que agafem la sargantana
@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     private MeshRenderer sargantanaMeshRenderer;
     public bool sargantanaAgafada = false;
     public ParticleSystem particulesSargantana;
+    [SerializeField] private Transform cameraFollowTarget;
 
     private void Start()
     {
@@ -48,9 +49,6 @@ public class PlayerController : MonoBehaviour
         rb.mass = 1f;
         rb.linearDamping = 0f;
 
-        // Si no se asignó cámara, buscar una en los hijos
-        if (playerCamera == null)
-            playerCamera = GetComponentInChildren<Camera>();
 
         sargantanaMeshRenderer = GameObject.Find("SargantanaAgafada").GetComponent<MeshRenderer>();
         particulesSargantana = gameObject.GetComponentInChildren<ParticleSystem>();
@@ -61,12 +59,15 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         HandleMouseLook();
+
+        if (frozen) return;
+
         HandleMovementInput();
         CheckGround();
 
-        if (Mouse.current.leftButton.wasPressedThisFrame) //si clica el boto esquerre
+        if (Mouse.current.leftButton.wasPressedThisFrame && tutorialDone) //si clica el boto esquerre
         {
-            Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+            Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
             RaycastHit hit; //tira un raig
 
             if (Physics.Raycast(ray, out hit, pickupRange, pickupLayerMask) && !sargantanaAgafada) //si el raig colisiona con un objeto dentro del rango y en la capa correcta
@@ -76,7 +77,6 @@ public class PlayerController : MonoBehaviour
                     Debug.Log("Recojer");
 
                     Drac drac = hit.collider.gameObject.GetComponent<Drac>();
-                    
 
                     if (drac != null)
                     {
@@ -104,7 +104,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
-        else if (Mouse.current.leftButton.wasPressedThisFrame && !isOnPaintZone) // Si el jugador hace clic izquierdo mientras no está en una zona de pintura, suelta la sargantana
+        else if (Mouse.current.leftButton.wasPressedThisFrame && !isOnPaintZone && tutorialDone) // Si el jugador hace clic izquierdo mientras no está en una zona de pintura, suelta la sargantana
         {
             Soltar();
         }
@@ -112,6 +112,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if(frozen) return;
         // Aplicar movimiento en FixedUpdate para física coherente
         ApplyMovement();
         ApplyGravity();
@@ -142,7 +143,7 @@ public class PlayerController : MonoBehaviour
         // Rotación vertical de la cámara (eje X local)
         verticalRotation -= mouseY;
         verticalRotation = Mathf.Clamp(verticalRotation, -verticalLookLimit, verticalLookLimit);
-        playerCamera.transform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
+        cameraFollowTarget.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
     }
 
     private void HandleMovementInput()
@@ -219,5 +220,18 @@ public class PlayerController : MonoBehaviour
         {
             isOnPaintZone = false;
         }
+    }
+
+    private bool frozen = false;
+
+    public void SetFrozen(bool value)
+    {
+        frozen = value;
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+            rb.isKinematic = value; // Si está congelado, no aplicar física
+        }
+           
     }
 }
