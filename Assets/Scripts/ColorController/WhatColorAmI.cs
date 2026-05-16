@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class WhatColorAmI : MonoBehaviour
@@ -57,4 +58,9 @@ public class WhatColorAmI : MonoBehaviour
     }
 
     public bool IsPainted => isPainted;
+
+    public void SetValidColor(ColorSO color)
+    {
+        validColor = color;
+    }
 }
