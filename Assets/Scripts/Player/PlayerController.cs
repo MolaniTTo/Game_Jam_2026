@@ -32,7 +32,6 @@ public class PlayerController : MonoBehaviour
     private MeshRenderer sargantanaMeshRenderer;
     public bool sargantanaAgafada = false;
     public ParticleSystem particulesSargantana;
-    [SerializeField] private ParticleSystem particulesPintura;
     [SerializeField] private Transform cameraFollowTarget;
     [SerializeField] private Transform sargantanaSpawn;
     [SerializeField] private GameObject sargantanaAgafadaPrefab;
@@ -102,13 +101,11 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.collider.CompareTag("sculture"))
                 {
-                    ChangeColor changeColor = hit.collider.gameObject.GetComponent<ChangeColor>();
-
-                    if (changeColor != null)
+                    Debug.Log("Pintar");
+                    WhatColorAmI whatColor = hit.collider.gameObject.GetComponent<WhatColorAmI>();
+                    if (whatColor != null)
                     {
-                        changeColor.ChangeColorSculture(colorPicked.currentColor);
-                        particulesPintura.startColor = colorPicked.currentColor;
-                        particulesPintura.Play();
+                        whatColor.TryPaint(colorPicked.colorSO);
                         Soltar();
                     }
                 }
@@ -166,7 +163,6 @@ public class PlayerController : MonoBehaviour
         }
         sargantanaAgafada = false;
 
-        particulesSargantana.startColor = colorPicked.currentColor;
         particulesSargantana.Play();
     }
 

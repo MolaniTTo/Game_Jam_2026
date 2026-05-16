@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e4906793292e7446b96fbb33001ba8f, type: 3}
   m_Name: Blau
   m_EditorClassIdentifier: 
-  color: {r: 0.007687092, g: 0, b: 1, a: 0}
+  color: {r: 0.23137255, g: 0.14901961, b: 0.5254902, a: 0}
   colorName: Blau

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0e4906793292e7446b96fbb33001ba8f, type: 3}
-  m_Name: Verd
+  m_Name: VerdFort
   m_EditorClassIdentifier: 
-  color: {r: 0.45490196, g: 0.8, b: 0.36862746, a: 0}
-  colorName: Verd
+  color: {r: 0.2489142, g: 0.4339623, b: 0.20265219, a: 0}
+  colorName: VerdFort
