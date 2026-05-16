@@ -14,7 +14,6 @@ public class RoundController : MonoBehaviour
     private void Start()
     {
         GenerarPaleta();
-
     }
 
     public List<ColorSO> GenerarPaleta()
