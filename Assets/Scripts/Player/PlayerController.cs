@@ -12,6 +12,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundCheckDistance = 0.2f;
     [SerializeField] private LayerMask groundMask = ~0; // Todo excepto capas ignoradas
 
+    [SerializeField] Camera playerCamera;
+
     [Header("Mouse Look")]
     [SerializeField] private float mouseSensitivity = 2f;
     [SerializeField] private float verticalLookLimit = 80f;
@@ -71,12 +73,8 @@ public class PlayerController : MonoBehaviour
         HandleMovementInput();
         CheckGround();
 
-<<<<<<< HEAD
-        if (Mouse.current.leftButton.wasPressedThisFrame && tutorialDone) //si clica el boto esquerre
-=======
 
         if (!sargantanaAgafada && Mouse.current.leftButton.wasPressedThisFrame)
->>>>>>> f32bcee7934d7e9aa015418e4642ec2baf041dd2
         {
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
             RaycastHit hit; //tira un raig
