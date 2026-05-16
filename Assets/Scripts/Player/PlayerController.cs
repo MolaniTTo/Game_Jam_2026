@@ -24,7 +24,6 @@ public class PlayerController : MonoBehaviour
     public bool isOnPaintZone = false;
     private float verticalRotation = 0f;
     [SerializeField] private ColorPicked colorPicked; // Referencia al script del color que agafem la sargantana
-    [SerializeField] private Camera playerCamera;
 
     [Header("PickupSargantana")]
     [SerializeField] float pickupRange;
@@ -34,11 +33,13 @@ public class PlayerController : MonoBehaviour
     public bool sargantanaAgafada = false;
     public ParticleSystem particulesSargantana;
     [SerializeField] private Transform cameraFollowTarget;
+    [SerializeField] private Transform sargantanaSpawn;
+    [SerializeField] private GameObject sargantanaAgafadaPrefab;
+    private GameObject sargantanaAgafadaInstance = null;
 
     [SerializeField] Image PunteroImage;
     [SerializeField] Sprite puntero1;
     [SerializeField] Sprite puntero2;
-    [SerializeField] Sprite puntero3;
 
     private void Start()
     {
@@ -57,11 +58,9 @@ public class PlayerController : MonoBehaviour
         rb.mass = 1f;
         rb.linearDamping = 0f;
 
-
-        sargantanaMeshRenderer = GameObject.Find("SargantanaAgafada").GetComponent<MeshRenderer>();
         particulesSargantana = gameObject.GetComponentInChildren<ParticleSystem>();
 
-        sargantanaMeshRenderer.enabled = false;
+
     }
 
     private void Update()
@@ -73,7 +72,7 @@ public class PlayerController : MonoBehaviour
         HandleMovementInput();
         CheckGround();
 
-        if (!sargantanaAgafada && Mouse.current.leftButton.wasPressedThisFrame && tutorialDone)
+        if (Mouse.current.leftButton.wasPressedThisFrame && tutorialDone) //si clica el boto esquerre
         {
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
             RaycastHit hit; //tira un raig
@@ -131,19 +130,14 @@ public class PlayerController : MonoBehaviour
     {
         PunteroImage.sprite = puntero1;
 
-        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, pickupRange, pickupLayerMask))
         {
-            if (hit.collider.CompareTag("sargantana"))
+            if (hit.collider.CompareTag("sargantana") && !sargantanaAgafada)
             {
                 PunteroImage.sprite = puntero2;
-            }
-
-            if (hit.collider.CompareTag("sculture"))
-            {
-                PunteroImage.sprite = puntero3;
             }
         }
     }
@@ -151,14 +145,24 @@ public class PlayerController : MonoBehaviour
     private void Recollir(GameObject sargantanaGameObject)
     {
         Destroy(sargantanaGameObject);
-        sargantanaMeshRenderer.enabled = true;
+        sargantanaAgafadaInstance = Instantiate(
+            sargantanaAgafadaPrefab,
+            sargantanaSpawn 
+        );
+        sargantanaAgafadaInstance.GetComponent<ChangeColor>().ChangeColorSargantana(colorPicked.currentColor);
+        sargantanaAgafadaInstance.transform.localPosition = Vector3.zero;
+        sargantanaAgafadaInstance.transform.localRotation = Quaternion.identity;
         sargantanaAgafada = true;
     }
 
     private void Soltar()
     {
+        if (sargantanaAgafadaInstance != null)
+        {
+            Destroy(sargantanaAgafadaInstance);
+        }
         sargantanaAgafada = false;
-        sargantanaMeshRenderer.enabled = false;
+
         particulesSargantana.Play();
     }
 
