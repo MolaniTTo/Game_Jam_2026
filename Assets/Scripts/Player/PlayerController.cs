@@ -42,6 +42,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Sprite puntero1;
     [SerializeField] Sprite puntero2;
 
+    [SerializeField] MeshRenderer meshMaTancada;
+
     private void Start()
     {
         // Bloquear cursor
@@ -61,6 +63,7 @@ public class PlayerController : MonoBehaviour
 
         particulesSargantana = gameObject.GetComponentInChildren<ParticleSystem>();
 
+        meshMaTancada.enabled = false;
 
     }
 
@@ -161,6 +164,7 @@ public class PlayerController : MonoBehaviour
         sargantanaAgafadaInstance.transform.localRotation = Quaternion.identity;
         sargantanaAgafada = true;
 
+        meshMaTancada.enabled = true;
         
     }
 
@@ -173,6 +177,8 @@ public class PlayerController : MonoBehaviour
         sargantanaAgafada = false;
 
         particulesSargantana.Play();
+
+        meshMaTancada.enabled = false;
     }
 
     private void HandleMouseLook()
