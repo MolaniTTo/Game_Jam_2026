@@ -2,30 +2,34 @@ using UnityEngine;
 
 public class ChangeColor : MonoBehaviour
 {
-    public Material lagartoMat;
     public Material scultureMat;
     public Color otherColor;
     public string otherColorName;
+
+    private Material instanceMat; //instancia propia de lagartija o escultura
+    private Renderer lizardRenderer;
 
 
     void Start()
     {
         otherColor = Color.green;
-    }
+        lizardRenderer = GetComponent<Renderer>();
 
-    // Update is called once per frame
-    void Update()
-    {
-
+        if (lizardRenderer != null)
+        {
+            instanceMat = new Material(lizardRenderer.material); //crea una nueva instancia del material para evitar modificar el material original
+            lizardRenderer.material = instanceMat; //asigna la nueva instancia al renderer del lagarto
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<ColorTerra>() != null && gameObject.CompareTag("sargantana"))
         {
-            otherColor = other.gameObject.GetComponent<ColorTerra>().colorSO.color; //agafa el color del objeto que ha colisionado
-            otherColorName = other.gameObject.GetComponent<ColorTerra>().colorSO.colorName; //agafa el nombre del color del objeto que ha colisionado
-            lagartoMat.color = otherColor; //cambia el color del material del lagarto al color del objeto que ha colisionado
+            ColorTerra terra = other.gameObject.GetComponent<ColorTerra>();
+            otherColor = terra.colorSO.color;
+            otherColorName = terra.colorSO.colorName;
+            instanceMat.color = otherColor; //cambia el color del material del lagarto al color del ScriptableObject
         }
     }
 
@@ -36,6 +40,9 @@ public class ChangeColor : MonoBehaviour
 
     public void ChangeColorSculture(Color newColor)
     {
-        scultureMat.color = newColor; 
+        if(instanceMat != null)
+        {
+            instanceMat.color = newColor; //cambia el color del material de la escultura al nuevo color recibido
+        }
     }
 }
