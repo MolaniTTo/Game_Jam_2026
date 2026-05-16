@@ -611,6 +611,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 4968957ff1c90404db41c1ad66ab689d, type: 2}
   currentPalette: {fileID: 0}
   colorsResultat: []
+  whatColorAmI: []
 --- !u!4 &503495585
 Transform:
   m_ObjectHideFlags: 0
@@ -11113,61 +11114,37 @@ PrefabInstance:
       propertyPath: m_Name
       value: CanvasHUD
       objectReference: {fileID: 0}
-    - target: {fileID: 3432788748296615418, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
-      propertyPath: m_margin.w
-      value: 12.91095
+    - target: {fileID: 6429316618367525846, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.9760001
       objectReference: {fileID: 0}
-    - target: {fileID: 3432788748296615418, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
-      propertyPath: m_colorMode
-      value: 1
+    - target: {fileID: 6429316618367525846, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.94451857
       objectReference: {fileID: 0}
-    - target: {fileID: 3432788748296615418, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
-      propertyPath: m_fontStyle
-      value: 1
+    - target: {fileID: 6429316618367525846, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.84000003
       objectReference: {fileID: 0}
-    - target: {fileID: 3432788748296615418, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
-      propertyPath: m_fontColor.b
-      value: 1
+    - target: {fileID: 6429316618367525846, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.8453704
       objectReference: {fileID: 0}
-    - target: {fileID: 3432788748296615418, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
-      propertyPath: m_fontColor.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3432788748296615418, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
-      propertyPath: m_fontColor.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3432788748296615418, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
-      propertyPath: m_fontColor32.rgba
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 3432788748296615418, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
-      propertyPath: m_enableVertexGradient
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3432788748296615418, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
-      propertyPath: m_fontColorGradient.topLeft.r
+    - target: {fileID: 6429316618367525846, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
+      propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3432788748296615418, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
-      propertyPath: m_fontColorGradient.bottomLeft.r
+    - target: {fileID: 6429316618367525846, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
+      propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4145222358277999728, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
-      propertyPath: m_Color.a
+    - target: {fileID: 6429316618367525846, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
+      propertyPath: m_AnchoredPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4145222358277999728, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
-      propertyPath: m_Color.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4145222358277999728, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
-      propertyPath: m_Color.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6942813575048252702, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
+    - target: {fileID: 6429316618367525846, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -12.9
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
