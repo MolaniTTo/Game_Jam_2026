@@ -39,4 +39,5 @@ public class RoundController : MonoBehaviour
 
         return currentPalette.colors;
     }
+
 }

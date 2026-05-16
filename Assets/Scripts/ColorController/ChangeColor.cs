@@ -6,7 +6,7 @@ public class ChangeColor : MonoBehaviour
     public Color otherColor;
     public string otherColorName;
     private Material instanceMat; //instancia propia de lagartija o escultura
-
+    [SerializeField] private ColorSO currentColorSO;
 
     void Awake()
     {
@@ -28,13 +28,9 @@ public class ChangeColor : MonoBehaviour
     {
         if (other.gameObject.GetComponent<ColorTerra>() != null && gameObject.CompareTag("sargantana"))
         {
-            if (instanceMat == null)
-            {
-                Debug.LogError("instanceMat es NULL en " + gameObject.name + " — ¿está asignado el Renderer en el Inspector?");
-                return;
-            }
-
+            if (instanceMat == null) return;
             ColorTerra terra = other.gameObject.GetComponent<ColorTerra>();
+            currentColorSO = terra.colorSO;    
             otherColor = terra.colorSO.color;
             otherColorName = terra.colorSO.colorName;
             instanceMat.color = otherColor;
@@ -60,5 +56,10 @@ public class ChangeColor : MonoBehaviour
         {
             instanceMat.color = newColor; //cambia el color del material de la escultura al nuevo color recibido
         }
+    }
+
+    public ColorSO GetCurrentColorSO()
+    {
+        return currentColorSO;
     }
 }

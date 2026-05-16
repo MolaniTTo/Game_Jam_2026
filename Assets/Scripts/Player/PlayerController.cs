@@ -101,11 +101,11 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.collider.CompareTag("sculture"))
                 {
-                    ChangeColor changeColor = hit.collider.gameObject.GetComponent<ChangeColor>();
-
-                    if (changeColor != null)
+                    Debug.Log("Pintar");
+                    WhatColorAmI whatColor = hit.collider.gameObject.GetComponent<WhatColorAmI>();
+                    if (whatColor != null)
                     {
-                        changeColor.ChangeColorSculture(colorPicked.currentColor);
+                        whatColor.TryPaint(colorPicked.colorSO);
                         Soltar();
                     }
                 }

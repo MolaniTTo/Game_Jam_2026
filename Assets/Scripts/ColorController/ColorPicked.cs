@@ -16,6 +16,7 @@ public class ColorPicked : MonoBehaviour
     public void DragonPicked(Drac drac)
     {
         currentColor = drac.changeColor.GetCurrentColor();
+        currentColor = colorSO.color;
     }
 
 }
