@@ -1,4 +1,3 @@
-using UnityEditor.ShaderGraph;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ColorTerra", menuName = "ScriptableObjects/ColorTerra")]

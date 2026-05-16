@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class RoundController : MonoBehaviour
 {
+    public static RoundController Instance { get; private set; }
+
     [Header("Todas las paletas posibles")]
     [SerializeField] private List<PaletteSO> palettes;
 
@@ -10,6 +12,12 @@ public class RoundController : MonoBehaviour
     [SerializeField] private PaletteSO currentPalette;
 
     public List<ColorSO> colorsResultat;
+
+    void Awake()
+    {
+        if (Instance != null) { Destroy(gameObject); return; }
+        Instance = this;
+    }
 
     private void Start()
     {

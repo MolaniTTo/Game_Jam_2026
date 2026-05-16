@@ -127,7 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4047722dbc601d141b307387a1fb919d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scultureMat: {fileID: 0}
+  lizardRenderer: {fileID: 1760782751058688424}
   otherColor: {r: 0, g: 0, b: 0, a: 0}
   otherColorName: 
 --- !u!54 &7405214230776789363
@@ -183,6 +183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   puntosPatrulla: []
+  animator: {fileID: 0}
   distanciaMinima: 0.5
 --- !u!195 &130644902365815223
 NavMeshAgent:
