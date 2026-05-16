@@ -28736,17 +28736,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 405216939484306448, guid: d4102692591f5344dbdfc15a6f69445c, type: 3}
   m_PrefabInstance: {fileID: 1796799032}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1798255482 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5204948081815004709, guid: b4f6472cca984e54486bfc68d0741e00, type: 3}
-  m_PrefabInstance: {fileID: 3166818998428532776}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 457dc69d60213804fb10d320550b5f2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1799369603
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35880,10 +35869,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1547315735}
     m_Modifications:
-    - target: {fileID: 2583556370335554773, guid: b4f6472cca984e54486bfc68d0741e00, type: 3}
-      propertyPath: manotazo
-      value: 
-      objectReference: {fileID: 1798255482}
+    - target: {fileID: 2150253214828065260, guid: b4f6472cca984e54486bfc68d0741e00, type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 60
+      objectReference: {fileID: 0}
     - target: {fileID: 2583556370335554773, guid: b4f6472cca984e54486bfc68d0741e00, type: 3}
       propertyPath: PunteroImage
       value: 

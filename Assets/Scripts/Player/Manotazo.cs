@@ -3,7 +3,7 @@ using UnityEngine;
 public class Manotazo : MonoBehaviour
 {
     private bool girando = false;
-    private float velocidad = 600f;
+    private float velocidad = 450f;
 
     private Quaternion rotacionInicial;
     private float rotacionActual = 0f;
@@ -11,6 +11,7 @@ public class Manotazo : MonoBehaviour
     private MeshRenderer meshRenderer;
 
     private int sentido = -1;
+    private ParticleSystem particleSystem;
 
     void Start()
     {
@@ -18,6 +19,8 @@ public class Manotazo : MonoBehaviour
         meshRenderer = gameObject.GetComponentInChildren<MeshRenderer>();
 
         meshRenderer.enabled = false;
+
+        particleSystem = gameObject.GetComponentInChildren<ParticleSystem>();
     }
 
     void Update()
@@ -48,5 +51,7 @@ public class Manotazo : MonoBehaviour
 
         girando = true;
         rotacionActual = 0f;
+
+        particleSystem.Play();
     }
 }
