@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class TutorialSequencer : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class TutorialSequencer : MonoBehaviour
     [SerializeField] private PlayerController playerController;
     [SerializeField] private Transform sargantanaTalkPoint;
     [SerializeField] private DracSpawner spawner;
+    [SerializeField] private Image canvasHUD;
 
     [Header("Puntos de cámara (en orden)")]
     [SerializeField] private CinemachineCameraPoint[] cameraPoints;
@@ -27,6 +29,11 @@ public class TutorialSequencer : MonoBehaviour
     {
         if (Instance != null) { Destroy(gameObject); return; }
         Instance = this;
+    }
+
+    private void Start()
+    {
+        canvasHUD.enabled = false; // Asegura que el HUD esté oculto al inicio del tutorial
     }
 
     // Llamado por TutorialZone cuando el player entra
@@ -96,6 +103,7 @@ public class TutorialSequencer : MonoBehaviour
             spawner.StartSpawning();
 
         playerController.tutorialDone = true;
+        canvasHUD.enabled = true; // Muestra el HUD al finalizar el tutorial
     }
 
     public CinemachineCameraPoint GetCameraPoint(int index)

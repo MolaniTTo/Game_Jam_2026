@@ -71,12 +71,7 @@ public class PlayerController : MonoBehaviour
         HandleMovementInput();
         CheckGround();
 
-<<<<<<< HEAD
         if (Mouse.current.leftButton.wasPressedThisFrame && tutorialDone) //si clica el boto esquerre
-=======
-
-        if (!sargantanaAgafada && Mouse.current.leftButton.wasPressedThisFrame)
->>>>>>> f32bcee7934d7e9aa015418e4642ec2baf041dd2
         {
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
             RaycastHit hit; //tira un raig
@@ -134,7 +129,7 @@ public class PlayerController : MonoBehaviour
     {
         PunteroImage.sprite = puntero1;
 
-        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, pickupRange, pickupLayerMask))
