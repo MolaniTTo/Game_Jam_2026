@@ -24,6 +24,7 @@ public class PlayerController : MonoBehaviour
     public bool isOnPaintZone = false;
     private float verticalRotation = 0f;
     [SerializeField] private ColorPicked colorPicked; // Referencia al script del color que agafem la sargantana
+    [SerializeField] private Camera playerCamera;
 
     [Header("PickupSargantana")]
     [SerializeField] float pickupRange;
@@ -37,6 +38,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Image PunteroImage;
     [SerializeField] Sprite puntero1;
     [SerializeField] Sprite puntero2;
+    [SerializeField] Sprite puntero3;
 
     private void Start()
     {
@@ -71,12 +73,7 @@ public class PlayerController : MonoBehaviour
         HandleMovementInput();
         CheckGround();
 
-<<<<<<< HEAD
-        if (Mouse.current.leftButton.wasPressedThisFrame && tutorialDone) //si clica el boto esquerre
-=======
-
-        if (!sargantanaAgafada && Mouse.current.leftButton.wasPressedThisFrame)
->>>>>>> f32bcee7934d7e9aa015418e4642ec2baf041dd2
+        if (!sargantanaAgafada && Mouse.current.leftButton.wasPressedThisFrame && tutorialDone)
         {
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
             RaycastHit hit; //tira un raig
@@ -142,6 +139,11 @@ public class PlayerController : MonoBehaviour
             if (hit.collider.CompareTag("sargantana"))
             {
                 PunteroImage.sprite = puntero2;
+            }
+
+            if (hit.collider.CompareTag("sculture"))
+            {
+                PunteroImage.sprite = puntero3;
             }
         }
     }
