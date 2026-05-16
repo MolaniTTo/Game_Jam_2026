@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 203e8b50eb154f34e9d26bb15b850b28, type: 3}
+  m_Name: Level3
+  m_EditorClassIdentifier: 
+  groups:
+  - pieceNames:
+    - P0
+  - pieceNames:
+    - P1
+    - P2
+  - pieceNames:
+    - P3
+    - P4
+  - pieceNames:
+    - P5
+    - P6
+  - pieceNames:
+    - P7
+    - P8
+  - pieceNames:
+    - P9
+    - P10
+  - pieceNames:
+    - P11
+  - pieceNames:
+    - P12
+    - P13
+  - pieceNames:
+    - P14
+  - pieceNames:
+    - P15
+  - pieceNames:
+    - P16
+  - pieceNames:
+    - P17
+  - pieceNames:
+    - P18
+  - pieceNames:
+    - P19
+    - P21
+  - pieceNames:
+    - P20

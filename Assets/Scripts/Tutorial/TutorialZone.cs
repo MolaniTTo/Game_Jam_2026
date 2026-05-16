@@ -6,7 +6,7 @@ public class TutorialZone : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            TutorialSequencer.Instance?.StartTutorial(other.transform);
+            //TutorialSequencer.Instance?.StartTutorial(other.transform);
             // Desactiva el trigger para que no se repita
             GetComponent<Collider>().enabled = false;
         }

@@ -7,29 +7,44 @@ public class DracSpawner : MonoBehaviour
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private int initialCount = 5;
     [SerializeField] private float spawnInterval = 10f;
-    [SerializeField] private int maxSargantanas = 15;
 
+    private int maxSargantanas = 15;
     private bool spawning = false;
+    private Coroutine spawnCoroutine;
+
+    public void ConfigurarRonda(int nouMax)
+    {
+        maxSargantanas = nouMax;
+        spawning = false;
+    }
 
     public void StartSpawning()
     {
         if (spawning) return;
         spawning = true;
 
-        // Spawn inicial
         for (int i = 0; i < initialCount; i++)
             SpawnOne();
 
-        StartCoroutine(SpawnLoop());
+        spawnCoroutine = StartCoroutine(SpawnLoop());
+    }
+
+    public void StopSpawning()
+    {
+        spawning = false;
+        if (spawnCoroutine != null)
+        {
+            StopCoroutine(spawnCoroutine);
+            spawnCoroutine = null;
+        }
     }
 
     private IEnumerator SpawnLoop()
     {
-        while (true)
+        while (spawning)
         {
             yield return new WaitForSeconds(spawnInterval);
-
-            if (GameObject.FindGameObjectsWithTag("sargantana").Length < maxSargantanas)
+            if (spawning && GameObject.FindGameObjectsWithTag("sargantana").Length < maxSargantanas)
                 SpawnOne();
         }
     }

@@ -10,12 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbd670a2c95c3924fb994ffe20f2adb4, type: 3}
-  m_Name: Paleta1
+  m_Name: Palette3_1
   m_EditorClassIdentifier: 
-  paletteName: Paleta2
+  paletteName: 
   colors:
-  - {fileID: 11400000, guid: b5e2fd3d0738d2d44927125fdea93a02, type: 2}
   - {fileID: 11400000, guid: d98af78f61dfe89459e1b5215664a841, type: 2}
   - {fileID: 11400000, guid: 6d6cbfd243a075b4087606d01e109eee, type: 2}
   - {fileID: 11400000, guid: 5aa2b1df2b798004faa4204d250fad1d, type: 2}
-  - {fileID: 11400000, guid: e6f489b19ffc23d4182d57503ee4ec17, type: 2}
+  - {fileID: 11400000, guid: adf9e25cd41a3554e8cf9f679c045960, type: 2}

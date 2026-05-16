@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1422c03e1ba9c014fb24d9393cd983ce, type: 3}
+  m_Name: Tutorial3
+  m_EditorClassIdentifier: 
+  lines:
+  - text: "OOOH! Aix\xED que tamb\xE9 has superat la segona ronda?!"
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "No s\xE9 si comen\xE7ar a preocupar-me o a impressionar-me..."
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "Per\xF2 prepara\u2019t, perqu\xE8 ara s\xED que el Park G\xFCell est\xE0
+      completament fora de control!"
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "La font m\xE0gica no para de canviar de color, les sargantanes corren
+      d\u2019una banda a l\u2019altra i el drac... pobre drac... cada vegada perd
+      els colors m\xE9s r\xE0pid."
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "Ara haur\xE0s de pensar i c\xF3rrer alhora."
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "A m\xE9s, moltes sargantanes s\u2019han amagat perqu\xE8 tenen por que
+      les tornis a fer servir de pinzell hum\xE0!"
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "Mira b\xE9 el color de la font, busca r\xE0pidament una sargantana del
+      mateix color i pinta la pe\xE7a correcta abans no canvi\xEF tot una altra vegada!"
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: A veure si aguantes aquesta ronda...
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0

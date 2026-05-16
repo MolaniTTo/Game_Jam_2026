@@ -31,6 +31,8 @@ public class WhatColorAmI : MonoBehaviour
             isPainted = true;
             if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
             changeColor.ChangeColorSculture(validColor.color);
+
+            RoundController.Instance.PaintGroup(this,validColor); // Notifica al RoundController que aquesta peça està pintada correctament
         }
         else
         {
@@ -39,6 +41,21 @@ public class WhatColorAmI : MonoBehaviour
             changeColor.ChangeColorSculture(appliedColor.color);
             fadeCoroutine = StartCoroutine(FadeToWhite(appliedColor.color));
         }
+    }
+
+    public void PaintDirect(ColorSO color)
+    {
+        if (isPainted) return;
+        isPainted = true;
+        if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
+        changeColor.ChangeColorSculture(color.color);
+    }
+
+    public void ResetPece()
+    {
+        isPainted = false;
+        if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
+        changeColor.ChangeColorSculture(Color.white);
     }
 
     private IEnumerator FadeToWhite(Color fromColor)
@@ -58,9 +75,9 @@ public class WhatColorAmI : MonoBehaviour
     }
 
     public bool IsPainted => isPainted;
-
     public void SetValidColor(ColorSO color)
     {
         validColor = color;
     }
+    public ColorSO GetValidColor() => validColor;
 }

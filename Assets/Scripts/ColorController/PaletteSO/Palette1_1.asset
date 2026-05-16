@@ -9,12 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1422c03e1ba9c014fb24d9393cd983ce, type: 3}
-  m_Name: Prova
+  m_Script: {fileID: 11500000, guid: bbd670a2c95c3924fb994ffe20f2adb4, type: 3}
+  m_Name: Palette1_1
   m_EditorClassIdentifier: 
-  lines:
-  - text: 'Hola
-
-'
-    cameraPointIndex: -1
-    cameraHoldSeconds: 0
+  paletteName: Paleta1
+  colors:
+  - {fileID: 11400000, guid: d98af78f61dfe89459e1b5215664a841, type: 2}
+  - {fileID: 11400000, guid: 6d6cbfd243a075b4087606d01e109eee, type: 2}
