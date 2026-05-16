@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Image PunteroImage;
     [SerializeField] Sprite puntero1;
     [SerializeField] Sprite puntero2;
+    [SerializeField] Sprite puntero3;
 
     private void Start()
     {
@@ -137,6 +138,11 @@ public class PlayerController : MonoBehaviour
             if (hit.collider.CompareTag("sargantana"))
             {
                 PunteroImage.sprite = puntero2;
+            }
+
+            if (hit.collider.CompareTag("sculture"))
+            {
+                PunteroImage.sprite = puntero3;
             }
         }
     }
