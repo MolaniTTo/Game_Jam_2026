@@ -2,23 +2,25 @@ using UnityEngine;
 
 public class ChangeColor : MonoBehaviour
 {
-    public Material scultureMat;
+    [SerializeField] private Renderer lizardRenderer;
     public Color otherColor;
     public string otherColorName;
-
     private Material instanceMat; //instancia propia de lagartija o escultura
-    private Renderer lizardRenderer;
+    [SerializeField] private ColorSO currentColorSO;
 
-
-    void Start()
+    void Awake()
     {
         otherColor = Color.green;
-        lizardRenderer = GetComponent<Renderer>();
 
         if (lizardRenderer != null)
         {
-            instanceMat = new Material(lizardRenderer.material); //crea una nueva instancia del material para evitar modificar el material original
-            lizardRenderer.material = instanceMat; //asigna la nueva instancia al renderer del lagarto
+            instanceMat = new Material(lizardRenderer.material);
+            lizardRenderer.material = instanceMat;
+            Debug.Log("ChangeColor OK: " + gameObject.name);
+        }
+        else
+        {
+            Debug.LogError("ChangeColor: lizardRenderer es NULL en " + gameObject.name);
         }
     }
 
@@ -26,10 +28,12 @@ public class ChangeColor : MonoBehaviour
     {
         if (other.gameObject.GetComponent<ColorTerra>() != null && gameObject.CompareTag("sargantana"))
         {
+            if (instanceMat == null) return;
             ColorTerra terra = other.gameObject.GetComponent<ColorTerra>();
+            currentColorSO = terra.colorSO;    
             otherColor = terra.colorSO.color;
             otherColorName = terra.colorSO.colorName;
-            instanceMat.color = otherColor; //cambia el color del material del lagarto al color del ScriptableObject
+            instanceMat.color = otherColor;
         }
     }
 
@@ -44,5 +48,18 @@ public class ChangeColor : MonoBehaviour
         {
             instanceMat.color = newColor; //cambia el color del material de la escultura al nuevo color recibido
         }
+    }
+
+    public void ChangeColorSargantana(Color newColor)
+    {
+        if (instanceMat != null)
+        {
+            instanceMat.color = newColor; //cambia el color del material de la escultura al nuevo color recibido
+        }
+    }
+
+    public ColorSO GetCurrentColorSO()
+    {
+        return currentColorSO;
     }
 }

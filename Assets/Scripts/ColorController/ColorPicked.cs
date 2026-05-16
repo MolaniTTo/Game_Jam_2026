@@ -15,7 +15,8 @@ public class ColorPicked : MonoBehaviour
 
     public void DragonPicked(Drac drac)
     {
-        currentColor = drac.changeColor.GetCurrentColor();
+        colorSO = drac.changeColor.GetCurrentColorSO(); // guarda el ColorSO de la lagartija
+        currentColor = colorSO != null ? colorSO.color : drac.changeColor.GetCurrentColor();
     }
 
 }

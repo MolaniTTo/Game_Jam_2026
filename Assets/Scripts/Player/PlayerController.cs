@@ -35,6 +35,9 @@ public class PlayerController : MonoBehaviour
     public bool sargantanaAgafada = false;
     public ParticleSystem particulesSargantana;
     [SerializeField] private Transform cameraFollowTarget;
+    [SerializeField] private Transform sargantanaSpawn;
+    [SerializeField] private GameObject sargantanaAgafadaPrefab;
+    private GameObject sargantanaAgafadaInstance = null;
 
     [SerializeField] Image PunteroImage;
     [SerializeField] Sprite puntero1;
@@ -57,11 +60,9 @@ public class PlayerController : MonoBehaviour
         rb.mass = 1f;
         rb.linearDamping = 0f;
 
-
-        sargantanaMeshRenderer = GameObject.Find("SargantanaAgafada").GetComponent<MeshRenderer>();
         particulesSargantana = gameObject.GetComponentInChildren<ParticleSystem>();
 
-        sargantanaMeshRenderer.enabled = false;
+
     }
 
     private void Update()
@@ -73,8 +74,7 @@ public class PlayerController : MonoBehaviour
         HandleMovementInput();
         CheckGround();
 
-
-        if (!sargantanaAgafada && Mouse.current.leftButton.wasPressedThisFrame)
+        if (Mouse.current.leftButton.wasPressedThisFrame && tutorialDone) //si clica el boto esquerre
         {
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
             RaycastHit hit; //tira un raig
@@ -103,11 +103,11 @@ public class PlayerController : MonoBehaviour
             {
                 if (hit.collider.CompareTag("sculture"))
                 {
-                    ChangeColor changeColor = hit.collider.gameObject.GetComponent<ChangeColor>();
-
-                    if (changeColor != null)
+                    Debug.Log("Pintar");
+                    WhatColorAmI whatColor = hit.collider.gameObject.GetComponent<WhatColorAmI>();
+                    if (whatColor != null)
                     {
-                        changeColor.ChangeColorSculture(colorPicked.currentColor);
+                        whatColor.TryPaint(colorPicked.colorSO);
                         Soltar();
                     }
                 }
@@ -132,12 +132,12 @@ public class PlayerController : MonoBehaviour
     {
         PunteroImage.sprite = puntero1;
 
-        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, pickupRange, pickupLayerMask))
         {
-            if (hit.collider.CompareTag("sargantana"))
+            if (hit.collider.CompareTag("sargantana") && !sargantanaAgafada)
             {
                 PunteroImage.sprite = puntero2;
             }
@@ -147,14 +147,24 @@ public class PlayerController : MonoBehaviour
     private void Recollir(GameObject sargantanaGameObject)
     {
         Destroy(sargantanaGameObject);
-        sargantanaMeshRenderer.enabled = true;
+        sargantanaAgafadaInstance = Instantiate(
+            sargantanaAgafadaPrefab,
+            sargantanaSpawn 
+        );
+        sargantanaAgafadaInstance.GetComponent<ChangeColor>().ChangeColorSargantana(colorPicked.currentColor);
+        sargantanaAgafadaInstance.transform.localPosition = Vector3.zero;
+        sargantanaAgafadaInstance.transform.localRotation = Quaternion.identity;
         sargantanaAgafada = true;
     }
 
     private void Soltar()
     {
+        if (sargantanaAgafadaInstance != null)
+        {
+            Destroy(sargantanaAgafadaInstance);
+        }
         sargantanaAgafada = false;
-        sargantanaMeshRenderer.enabled = false;
+
         particulesSargantana.Play();
     }
 
