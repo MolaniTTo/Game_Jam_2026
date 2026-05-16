@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform sargantanaSpawn;
     [SerializeField] private GameObject sargantanaAgafadaPrefab;
     private GameObject sargantanaAgafadaInstance = null;
+    [SerializeField] private Manotazo manotazo;
 
     [SerializeField] Image PunteroImage;
     [SerializeField] Sprite puntero1;
@@ -74,6 +75,7 @@ public class PlayerController : MonoBehaviour
 
         if (Mouse.current.leftButton.wasPressedThisFrame && tutorialDone) //si clica el boto esquerre
         {
+
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
             RaycastHit hit; //tira un raig
 
@@ -109,6 +111,11 @@ public class PlayerController : MonoBehaviour
                         Soltar();
                     }
                 }
+            }
+
+            if (!sargantanaAgafada)
+            {
+                manotazo.Ejecutar();
             }
         }
         else if (Mouse.current.leftButton.wasPressedThisFrame && !isOnPaintZone && tutorialDone) // Si el jugador hace clic izquierdo mientras no está en una zona de pintura, suelta la sargantana
@@ -153,6 +160,8 @@ public class PlayerController : MonoBehaviour
         sargantanaAgafadaInstance.transform.localPosition = Vector3.zero;
         sargantanaAgafadaInstance.transform.localRotation = Quaternion.identity;
         sargantanaAgafada = true;
+
+        
     }
 
     private void Soltar()
