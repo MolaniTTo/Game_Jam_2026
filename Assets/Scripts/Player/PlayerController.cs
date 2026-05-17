@@ -47,6 +47,13 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] MeshRenderer meshMaTancada;
 
+    [Header("Sons")]
+    private AudioSource audioSource;
+    [SerializeField] AudioClip stepSound;
+    [SerializeField] AudioClip handSound;
+    [SerializeField] AudioClip pickUpSound;
+    [SerializeField] AudioClip paintSound;
+
     private void Start()
     {
         // Bloquear cursor
@@ -65,6 +72,8 @@ public class PlayerController : MonoBehaviour
         rb.linearDamping = 0f;
 
         meshMaTancada.enabled = false;
+
+        audioSource = gameObject.GetComponent<AudioSource>();
 
     }
 
@@ -107,6 +116,7 @@ public class PlayerController : MonoBehaviour
             if (!sargantanaAgafada)
             {
                 manotazo.Ejecutar();
+                audioSource.PlayOneShot(handSound);
             }
 
             if (Physics.Raycast(ray, out hit, pickupRange, scultureMask) && sargantanaAgafada && isOnPaintZone)
@@ -118,6 +128,7 @@ public class PlayerController : MonoBehaviour
                     if (whatColor != null)
                     {
                         whatColor.TryPaint(colorPicked.colorSO);
+                        audioSource.PlayOneShot(paintSound);
                         Soltar();
                     }
                 }
@@ -168,6 +179,8 @@ public class PlayerController : MonoBehaviour
         sargantanaAgafada = true;
 
         meshMaTancada.enabled = true;
+
+        audioSource.PlayOneShot(pickUpSound);
         
     }
 
@@ -212,8 +225,32 @@ public class PlayerController : MonoBehaviour
 
         // Dirección relativa a la orientación del jugador
         Vector3 inputDirection = (transform.right * horizontal + transform.forward * vertical).normalized;
+
         float currentSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+
         moveDirection = inputDirection * currentSpeed;
+
+        // // SONIDO PASOS
+        // bool isMoving = inputDirection.magnitude > 0.1f;
+
+        // if (isMoving && isGrounded)
+        // {
+        //     if (!audioSource.isPlaying)
+        //     {
+        //         audioSource.clip = stepSound;
+        //         audioSource.loop = true;
+        //         audioSource.Play();
+        //     }
+
+        //     audioSource.pitch = Input.GetKey(KeyCode.LeftShift) ? 1.4f : 1f;
+        // }
+        // else
+        // {
+        //     if (audioSource.isPlaying)
+        //     {
+        //         audioSource.Stop();
+        //     }
+        // }
     }
 
     private void ApplyMovement()
