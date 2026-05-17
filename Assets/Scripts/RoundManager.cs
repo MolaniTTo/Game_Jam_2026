@@ -15,6 +15,7 @@ public class RoundManager : MonoBehaviour
         public List<PaletteSO> paletesPossibles;
         public int maxSargantanas;
         public float tempsRonda;
+        public float speed;
         public Transform playerSpawnPoint;
     }
 
@@ -75,7 +76,7 @@ public class RoundManager : MonoBehaviour
 
         roundController.SetPaletes(config.paletesPossibles);
         roundController.IniciarRonda(currentRoundIndex);
-        dracSpawner.ConfigurarRonda(config.maxSargantanas);
+        dracSpawner.ConfigurarRonda(config.maxSargantanas, config.speed);
         tempsRestant.ConfigurarRonda(config.tempsRonda);
 
         // Escull el diàleg segons si és reintent o no

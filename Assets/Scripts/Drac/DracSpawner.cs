@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class DracSpawner : MonoBehaviour
 {
@@ -9,12 +10,14 @@ public class DracSpawner : MonoBehaviour
     [SerializeField] private float spawnInterval = 10f;
 
     private int maxSargantanas = 15;
+    private float speedActual = 3.5f; // valor per defecte
     private bool spawning = false;
     private Coroutine spawnCoroutine;
 
-    public void ConfigurarRonda(int nouMax)
+    public void ConfigurarRonda(int nouMax, float nouSpeed)
     {
         maxSargantanas = nouMax;
+        speedActual = nouSpeed;
         spawning = false;
     }
 
@@ -22,10 +25,8 @@ public class DracSpawner : MonoBehaviour
     {
         if (spawning) return;
         spawning = true;
-
         for (int i = 0; i < initialCount; i++)
             SpawnOne();
-
         spawnCoroutine = StartCoroutine(SpawnLoop());
     }
 
@@ -53,6 +54,10 @@ public class DracSpawner : MonoBehaviour
     {
         if (spawnPoints.Length == 0) return;
         Transform point = spawnPoints[Random.Range(0, spawnPoints.Length)];
-        Instantiate(sargantanaPrefab, point.position, point.rotation);
+        GameObject nova = Instantiate(sargantanaPrefab, point.position, point.rotation);
+
+        NavMeshAgent agent = nova.GetComponent<NavMeshAgent>();
+        if (agent != null)
+            agent.speed = speedActual;
     }
 }

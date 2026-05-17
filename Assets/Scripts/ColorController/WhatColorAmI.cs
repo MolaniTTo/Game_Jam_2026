@@ -23,20 +23,28 @@ public class WhatColorAmI : MonoBehaviour
     // Cridat des de PlayerController en lloc de changeColor.ChangeColorSculture directament
     public void TryPaint(ColorSO appliedColor)
     {
-        if (isPainted) return; // ja té el color correcte, no es pot repintar
+        if (isPainted) return;
+
+        // Comprova que el color aplicat sigui l'actiu a VisualDracColor
+        VisualDracColor visual = VisualDracColor.Instance;
+        if (visual != null && visual.ColorActiu != appliedColor)
+        {
+            // Color no és l'actiu ara mateix — feedback visual d'error i torna a blanc
+            if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
+            changeColor.ChangeColorSculture(appliedColor.color);
+            fadeCoroutine = StartCoroutine(FadeToWhite(appliedColor.color));
+            return;
+        }
 
         if (appliedColor == validColor)
         {
-            // Color correcte — es queda
             isPainted = true;
             if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
             changeColor.ChangeColorSculture(validColor.color);
-
-            RoundController.Instance.PaintGroup(this,validColor); // Notifica al RoundController que aquesta peça està pintada correctament
+            RoundController.Instance.PaintGroup(this, validColor);
         }
         else
         {
-            // Color incorrecte — es pinta i torna a blanc
             if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
             changeColor.ChangeColorSculture(appliedColor.color);
             fadeCoroutine = StartCoroutine(FadeToWhite(appliedColor.color));

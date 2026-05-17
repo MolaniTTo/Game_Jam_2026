@@ -12,7 +12,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundCheckDistance = 0.2f;
     [SerializeField] private LayerMask groundMask = ~0; // Todo excepto capas ignoradas
 
-    [SerializeField] Camera playerCamera;
 
     [Header("Mouse Look")]
     [SerializeField] private float mouseSensitivity = 2f;
@@ -26,6 +25,7 @@ public class PlayerController : MonoBehaviour
     public bool isOnPaintZone = false;
     private float verticalRotation = 0f;
     [SerializeField] private ColorPicked colorPicked; // Referencia al script del color que agafem la sargantana
+    public bool isOnMenuMode = false;
 
     [Header("PickupSargantana")]
     [SerializeField] float pickupRange;
@@ -71,6 +71,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (isOnMenuMode) return;
+
         HandleMouseLook();
 
         if (frozen) return;

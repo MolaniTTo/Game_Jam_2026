@@ -4,47 +4,57 @@ using UnityEngine;
 
 public class VisualDracColor : MonoBehaviour
 {
+    public static VisualDracColor Instance { get; private set; }
+
     [Header("Llum de color actiu")]
     [SerializeField] private Light colorLight;
 
     [Header("Configuració de temps")]
-    [SerializeField] private float tempsParpadeixRapid = 3f;
+    [SerializeField] private float tempsParpadeixRapid = 5f; // canviat a 5 segons
     [SerializeField] private float velocityLerp = 1f;
+
+    [Header("UI Contorn")]
+    [SerializeField] private ContornColorController contornColor;
+    public ColorSO ColorActiu { get; private set; }
 
     private List<ColorSO> paleta;
     private List<WhatColorAmI> totesPeces;
     private int indexColorActiu = -1;
     private Coroutine cicleCoroutine;
 
+    
+
+    private void Awake()
+    {
+        if (Instance != null) { Destroy(gameObject); return; }
+        Instance = this;
+    }
+
     private void Start()
     {
         if (colorLight != null) colorLight.enabled = false;
     }
 
-    // Cridat pel RoundManager quan acaba el tutorial
     public void IniciarCicle()
     {
         if (cicleCoroutine != null) StopCoroutine(cicleCoroutine);
-
-        // Agafa la paleta i peces actualitzades del RoundController
         paleta = new List<ColorSO>(RoundController.Instance.colorsResultat);
         totesPeces = RoundController.Instance.whatColorAmI;
-
         if (colorLight != null) colorLight.enabled = false;
         cicleCoroutine = StartCoroutine(CicleColors());
     }
 
-    // Cridat pel RoundManager quan acaba la ronda
     public void AturaciCicle()
     {
+        ColorActiu = null;
         if (cicleCoroutine != null)
         {
             StopCoroutine(cicleCoroutine);
             cicleCoroutine = null;
         }
         if (colorLight != null) colorLight.enabled = false;
+        if (contornColor != null) contornColor.Amagar();
 
-        // Reset visual de totes les peces
         if (totesPeces != null)
             foreach (var peca in totesPeces)
                 if (!peca.IsPainted)
@@ -63,9 +73,9 @@ public class VisualDracColor : MonoBehaviour
 
             ultimIndex = nouIndex;
             indexColorActiu = nouIndex;
-            ColorSO colorActiu = paleta[indexColorActiu];
+            ColorActiu = paleta[indexColorActiu];
 
-            RoundController.Instance.NotificarColorActiu(colorActiu);
+            RoundController.Instance.NotificarColorActiu(ColorActiu);
 
             float tempsTotal = RoundController.Instance.tempsPerColor;
             float tempsNormal = tempsTotal - tempsParpadeixRapid;
@@ -73,14 +83,21 @@ public class VisualDracColor : MonoBehaviour
             if (colorLight != null)
             {
                 colorLight.enabled = true;
-                colorLight.color = colorActiu.color;
+                colorLight.color = ColorActiu.color;
             }
 
-            yield return StartCoroutine(FaseNormal(colorActiu, tempsNormal));
-            yield return StartCoroutine(FaseParpadeix(colorActiu, tempsParpadeixRapid));
+            // Fase normal — sense parpadeo UI
+            yield return StartCoroutine(FaseNormal(ColorActiu, tempsNormal));
+
+            // Fase parpadeo — activa el contorn UI al mateix temps
+            if (contornColor != null)
+                contornColor.IniciarParpadeo(ColorActiu.color, tempsParpadeixRapid);
+
+            yield return StartCoroutine(FaseParpadeix(ColorActiu, tempsParpadeixRapid));
 
             if (colorLight != null) colorLight.enabled = false;
-            ResetPecesColor(colorActiu);
+            if (contornColor != null) contornColor.Amagar();
+            ResetPecesColor(ColorActiu);
 
             yield return new WaitForSeconds(0.3f);
         }
