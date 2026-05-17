@@ -1,0 +1,51 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1422c03e1ba9c014fb24d9393cd983ce, type: 3}
+  m_Name: Tutorial2
+  m_EditorClassIdentifier: 
+  lines:
+  - text: "Andaaa! Per\xF2 si has superat la primera ronda!"
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "No m\u2019esperava pas que dur\xE9ssis tant, hehe!"
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "Durant uns instants semblava que el drac tornava a recuperar els seus
+      colors... per\xF2 les seves ll\xE0grimes han tornat a esborrar-ho tot!"
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "Ara el trencad\xEDs est\xE0 encara pitjor que abans..."
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "Han aparegut molts m\xE9s colors i cada vegada queden menys sargantanes
+      tranquil\xB7les pel parc."
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "I parlant d\u2019aix\xF2... la meva amiga d\u2019abans est\xE0 indignad\xEDssima
+      amb tu."
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "S\xED s\xED, la verda! Diu que l\u2019has aixecat del terra tan r\xE0pid
+      que encara veu estrelletes!"
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "Per\xF2 ara no hi ha temps per discutir!"
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "La font m\xE0gica est\xE0 cada vegada m\xE9s inestable. Els colors canvien
+      m\xE9s r\xE0pid i el drac necessita que pintis les peces correctes abans no
+      tornin a desapar\xE8ixer!"
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "A veure si ets prou r\xE0pid aquesta vegada..."
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0

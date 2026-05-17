@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class DracSpawner : MonoBehaviour
 {
@@ -7,29 +8,44 @@ public class DracSpawner : MonoBehaviour
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField] private int initialCount = 5;
     [SerializeField] private float spawnInterval = 10f;
-    [SerializeField] private int maxSargantanas = 15;
 
+    private int maxSargantanas = 15;
+    private float speedActual = 3.5f; // valor per defecte
     private bool spawning = false;
+    private Coroutine spawnCoroutine;
+
+    public void ConfigurarRonda(int nouMax, float nouSpeed)
+    {
+        maxSargantanas = nouMax;
+        speedActual = nouSpeed;
+        spawning = false;
+    }
 
     public void StartSpawning()
     {
         if (spawning) return;
         spawning = true;
-
-        // Spawn inicial
         for (int i = 0; i < initialCount; i++)
             SpawnOne();
+        spawnCoroutine = StartCoroutine(SpawnLoop());
+    }
 
-        StartCoroutine(SpawnLoop());
+    public void StopSpawning()
+    {
+        spawning = false;
+        if (spawnCoroutine != null)
+        {
+            StopCoroutine(spawnCoroutine);
+            spawnCoroutine = null;
+        }
     }
 
     private IEnumerator SpawnLoop()
     {
-        while (true)
+        while (spawning)
         {
             yield return new WaitForSeconds(spawnInterval);
-
-            if (GameObject.FindGameObjectsWithTag("sargantana").Length < maxSargantanas)
+            if (spawning && GameObject.FindGameObjectsWithTag("sargantana").Length < maxSargantanas)
                 SpawnOne();
         }
     }
@@ -38,6 +54,10 @@ public class DracSpawner : MonoBehaviour
     {
         if (spawnPoints.Length == 0) return;
         Transform point = spawnPoints[Random.Range(0, spawnPoints.Length)];
-        Instantiate(sargantanaPrefab, point.position, point.rotation);
+        GameObject nova = Instantiate(sargantanaPrefab, point.position, point.rotation);
+
+        NavMeshAgent agent = nova.GetComponent<NavMeshAgent>();
+        if (agent != null)
+            agent.speed = speedActual;
     }
 }

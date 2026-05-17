@@ -8,6 +8,7 @@ public class MenuDePausaScript : MonoBehaviour
     [Header("Botones del Menú")]
     [SerializeField] private Button botonResumen;
     [SerializeField] private Button botonSortir;
+    [SerializeField] private PlayerController player;
 
     [SerializeField] private GameObject panel;
 
@@ -26,6 +27,7 @@ public class MenuDePausaScript : MonoBehaviour
     }
 
     void Update() {
+
         if(Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             if (Time.timeScale == 0f)
@@ -42,6 +44,7 @@ public class MenuDePausaScript : MonoBehaviour
     void Pausa()
     {
         panel.SetActive(true);
+        player.isOnMenuMode = true;
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
     }
@@ -49,6 +52,7 @@ public class MenuDePausaScript : MonoBehaviour
     void Resumen()
     {
         panel.SetActive(false);
+        player.isOnMenuMode = false;
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
     }

@@ -44,7 +44,7 @@ public class MenuPrincipal : MonoBehaviour
     {
         Debug.Log("Cargando juego...");
         // Reemplaza "NombreDeTuEscena" con el nombre real de tu escena de juego
-        SceneManager.LoadScene("MainWorld");
+        SceneManager.LoadScene("SampleScene");
     }
 
     public void CerrarControles()

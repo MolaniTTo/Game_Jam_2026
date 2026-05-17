@@ -16,5 +16,5 @@ MonoBehaviour:
   - text: 'Hola
 
 '
-    cameraPointIndex: 0
+    cameraPointIndex: -1
     cameraHoldSeconds: 0

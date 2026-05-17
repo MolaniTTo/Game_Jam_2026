@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e4906793292e7446b96fbb33001ba8f, type: 3}
   m_Name: Verd
   m_EditorClassIdentifier: 
-  color: {r: 0.45490196, g: 0.8, b: 0.36862746, a: 0}
+  color: {r: 0.5741545, g: 0.9056604, b: 0.49127805, a: 1}
   colorName: Verd
