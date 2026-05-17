@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
     private MeshRenderer sargantanaMeshRenderer;
     public bool sargantanaAgafada = false;
     public ParticleSystem particulesSargantana;
+    public ParticleSystem particulesChorro;
     [SerializeField] private Transform cameraFollowTarget;
     [SerializeField] private Transform sargantanaSpawn;
     [SerializeField] private GameObject sargantanaAgafadaPrefab;
@@ -62,8 +63,6 @@ public class PlayerController : MonoBehaviour
         rb.freezeRotation = true; // Evita que el Rigidbody gire por físicas
         rb.mass = 1f;
         rb.linearDamping = 0f;
-
-        particulesSargantana = gameObject.GetComponentInChildren<ParticleSystem>();
 
         meshMaTancada.enabled = false;
 
@@ -104,6 +103,12 @@ public class PlayerController : MonoBehaviour
                     Debug.Log("El objeto no es recogible: " + hit.collider.name);
                 }
             }
+
+            if (!sargantanaAgafada)
+            {
+                manotazo.Ejecutar();
+            }
+
             if (Physics.Raycast(ray, out hit, pickupRange, scultureMask) && sargantanaAgafada && isOnPaintZone)
             {
                 if (hit.collider.CompareTag("sculture"))
@@ -118,10 +123,6 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if (!sargantanaAgafada)
-            {
-                manotazo.Ejecutar();
-            }
         }
         else if (Mouse.current.leftButton.wasPressedThisFrame && !isOnPaintZone && tutorialDone) // Si el jugador hace clic izquierdo mientras no está en una zona de pintura, suelta la sargantana
         {
@@ -178,7 +179,14 @@ public class PlayerController : MonoBehaviour
         }
         sargantanaAgafada = false;
 
+        Debug.Log("Ejecutar Particulas");
+        var main1 = particulesSargantana.main;
+        main1.startColor = colorPicked.currentColor;
         particulesSargantana.Play();
+
+        var main2 = particulesChorro.main;
+        main2.startColor = colorPicked.currentColor;
+        particulesChorro.Play();
 
         meshMaTancada.enabled = false;
     }
@@ -237,25 +245,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Opcional: liberar cursor con Escape
-    private void UpdateCursorLock()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else if (Input.GetMouseButtonDown(0) && Cursor.lockState == CursorLockMode.None)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-    }
+    // Deixar comentat
+    // private void UpdateCursorLock()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.Escape))
+    //     {
+    //         Cursor.lockState = CursorLockMode.None;
+    //         Cursor.visible = true;
+    //     }
+    //     else if (Input.GetMouseButtonDown(0) && Cursor.lockState == CursorLockMode.None)
+    //     {
+    //         Cursor.lockState = CursorLockMode.Locked;
+    //         Cursor.visible = false;
+    //     }
+    // }
 
-    private void LateUpdate()
-    {
-        UpdateCursorLock();
-    }
+    // private void LateUpdate()
+    // {
+    //     UpdateCursorLock();
+    // }
 
     private void OnTriggerEnter(Collider other)
     {
