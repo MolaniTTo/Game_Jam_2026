@@ -1121,7 +1121,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 39, y: -75}
+  m_AnchoredPosition: {x: 30, y: -47.100037}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &302508402
@@ -1153,8 +1153,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1177,7 +1177,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -2409,6 +2409,18 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6429316618367525846, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 72.4797
+      objectReference: {fileID: 0}
+    - target: {fileID: 6429316618367525846, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -36.23987
+      objectReference: {fileID: 0}
+    - target: {fileID: 6942813575048252702, guid: b90ba45af7c2ff04bb9bec5e5f41d0db, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -3446,7 +3458,7 @@ MonoBehaviour:
   nomEscenaFinal: Credits
   tempsEntrePeces: 0.1
   tempsAbansCanviEscena: 2
-  rondaText: {fileID: 0}
+  rondaText: {fileID: 302508402}
 --- !u!4 &1238680035
 Transform:
   m_ObjectHideFlags: 0

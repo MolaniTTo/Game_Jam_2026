@@ -46,7 +46,7 @@ public class RoundManager : MonoBehaviour
     private bool primerCopRonda = true;
 
     private ProgressColorHUD hudActiu = null; // HUD actiu ara mateix
-    public TextMeshPro rondaText; // Text que mostra el número de ronda actual
+    public TextMeshProUGUI rondaText; // Text que mostra el número de ronda actual
     private bool EsUltimaRonda => currentRoundIndex >= rondes.Count - 1; 
 
     void Awake()
