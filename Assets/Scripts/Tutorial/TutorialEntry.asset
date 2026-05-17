@@ -13,33 +13,39 @@ MonoBehaviour:
   m_Name: TutorialEntry
   m_EditorClassIdentifier: 
   lines:
-  - text: Eieieiei has vist aixo?
+  - text: "Ei ei ei!! Has vist qu\xE8 ha passat?!?"
     cameraPointIndex: -1
     cameraHoldSeconds: 2
-  - text: El drac ha perdut els colors!
+  - text: "El drac d\u2019en Gaud\xED... s\u2019ha quedat sense colors!!"
     cameraPointIndex: 0
     cameraHoldSeconds: 2
-  - text: Flipant eh
+  - text: "Des que el van portar d\u2019orient est\xE0 ben trist\xF3... no fa res
+      m\xE9s que plorar i plorar. I amb tanta ll\xE0grima ha provocat un trencad\xEDs
+      gegant de colors per tot el terra del Park G\xFCell!"
     cameraPointIndex: -1
-    cameraHoldSeconds: 2
-  - text: Es veu que des de que l'han portat d'orient esta algo trist...
-    cameraPointIndex: -1
-    cameraHoldSeconds: 2
-  - text: Ahir va estar plorant i va perdre els colors del seu trencadis
-    cameraPointIndex: -1
-    cameraHoldSeconds: 2
-  - text: Mira quin desastre! Estan tots per terra!
-    cameraPointIndex: -1
-    cameraHoldSeconds: 2
-  - text: Estem cansades! No parem de canviar de color!
+    cameraHoldSeconds: 0
+  - text: "Les meves amigues, les sargantanes, estan desesperades... Cada dos per
+      tres es tenyeixen de colors diferents per culpa d\u2019aquest embolic! Estan
+      cansad\xEDssimes i molt esverades..."
     cameraPointIndex: 1
     cameraHoldSeconds: 2
-  - text: Si us plau, alliverans i fes que deixem anar el color per poder ser lliures!
+  - text: "Necessitem ajuda! I r\xE0pid!"
     cameraPointIndex: -1
-    cameraHoldSeconds: 2
-  - text: Aquella font de alla em sembla que et dona alguna pista...
+    cameraHoldSeconds: 0
+  - text: "He sentit que la font m\xE0gica del parc hi t\xE9 alguna cosa a veure...
+      No s\xE9 ben b\xE9 com funciona, per\xF2 sembla que els seus colors poden despertar
+      els del drac."
     cameraPointIndex: -1
-    cameraHoldSeconds: 2
-  - text: Estas preparat? Doncs aveure si ens atrapes!
+    cameraHoldSeconds: 0
+  - text: "Mira b\xE9 la font! Quan canvi\xEF de color, les peces del drac reaccionaran
+      tamb\xE9!"
     cameraPointIndex: -1
-    cameraHoldSeconds: 2
+    cameraHoldSeconds: 0
+  - text: "Corre pel trencad\xEDs, agafa una sargantana del color correcte i pinta
+      les peces del drac abans no torni a canviar!"
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "Si us plau... ajuda\u2019ns a fer que el drac recuperi els seus colors
+      i que les sargantanes tornin a la normalitat!"
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0

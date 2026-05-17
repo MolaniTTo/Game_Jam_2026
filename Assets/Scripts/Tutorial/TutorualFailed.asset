@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1422c03e1ba9c014fb24d9393cd983ce, type: 3}
+  m_Name: TutorualFailed
+  m_EditorClassIdentifier: 
+  lines:
+  - text: A veureeeee...
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "No t\u2019ho expliquen a l\u2019escola dels humans aix\xF2 o qu\xE8?"
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: Mira la font!
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "Si la font \xE9s blava, agafes una sargantana blava.\nSi la pe\xE7a del
+      drac \xE9s blava, la pintes.\nI intentes no c\xF3rrer com un pollastre sense
+      cap, si pot ser."
+    cameraPointIndex: 0
+    cameraHoldSeconds: 2
+  - text: "Pobret drac... aix\xED no recuperarem els colors mai!"
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "Va, torna-ho a provar. Per\xF2 aquesta vegada intenta mirar abans d\u2019agafar
+      coses a l\u2019atzar!"
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0

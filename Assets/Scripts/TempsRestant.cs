@@ -4,24 +4,46 @@ using TMPro;
 public class TempsRestant : MonoBehaviour
 {
     private TextMeshProUGUI textTemps;
-    [SerializeField] float totalTime = 120f;
+    private float totalTime = 120f;
+    private bool running = false;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake() // <-- canviat de Start a Awake
     {
-        textTemps = gameObject.GetComponent<TextMeshProUGUI>();
+        textTemps = GetComponent<TextMeshProUGUI>();
     }
 
-    // Update is called once per frame
-    void FixedUpdate() {
+    void FixedUpdate()
+    {
+        if (!running) return;
         if (totalTime > 0)
         {
             totalTime -= Time.deltaTime;
-            if (totalTime < 0) totalTime = 0;
-            
-            int minutes = Mathf.FloorToInt(totalTime / 60);
-            int seconds = Mathf.FloorToInt(totalTime % 60);
-            textTemps.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+            if (totalTime <= 0)
+            {
+                totalTime = 0;
+                running = false;
+                ActualitzarText();
+                RoundManager.Instance?.OnTempsAcabat();
+                return;
+            }
+            ActualitzarText();
         }
     }
+
+    private void ActualitzarText()
+    {
+        int minutes = Mathf.FloorToInt(totalTime / 60);
+        int seconds = Mathf.FloorToInt(totalTime % 60);
+        textTemps.text = string.Format("{0:00}:{1:00}", minutes, seconds);
+    }
+
+    public void ConfigurarRonda(float temps)
+    {
+        totalTime = temps;
+        running = false;
+        ActualitzarText();
+    }
+
+    public void StartTimer() => running = true;
+    public void StopTimer() => running = false;
 }

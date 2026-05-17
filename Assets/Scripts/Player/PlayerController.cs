@@ -12,6 +12,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float groundCheckDistance = 0.2f;
     [SerializeField] private LayerMask groundMask = ~0; // Todo excepto capas ignoradas
 
+
     [Header("Mouse Look")]
     [SerializeField] private float mouseSensitivity = 2f;
     [SerializeField] private float verticalLookLimit = 80f;
@@ -24,6 +25,7 @@ public class PlayerController : MonoBehaviour
     public bool isOnPaintZone = false;
     private float verticalRotation = 0f;
     [SerializeField] private ColorPicked colorPicked; // Referencia al script del color que agafem la sargantana
+    public bool isOnMenuMode = false;
 
     [Header("PickupSargantana")]
     [SerializeField] float pickupRange;
@@ -32,11 +34,30 @@ public class PlayerController : MonoBehaviour
     private MeshRenderer sargantanaMeshRenderer;
     public bool sargantanaAgafada = false;
     public ParticleSystem particulesSargantana;
+    public ParticleSystem particulesChorro;
     [SerializeField] private Transform cameraFollowTarget;
+    [SerializeField] private Transform sargantanaSpawn;
+    [SerializeField] private GameObject sargantanaAgafadaPrefab;
+    private GameObject sargantanaAgafadaInstance = null;
+    [SerializeField] private Manotazo manotazo;
 
     [SerializeField] Image PunteroImage;
     [SerializeField] Sprite puntero1;
     [SerializeField] Sprite puntero2;
+
+    [SerializeField] MeshRenderer meshMaTancada;
+    [SerializeField] ParticleSystem particulesImpacteCorrecte;
+
+
+    [Header("SphereCast")]
+    [SerializeField] private float sphereRadius = 0.3f;
+
+    [Header("Sons")]
+    private AudioSource audioSource;
+    [SerializeField] AudioClip stepSound;
+    [SerializeField] AudioClip handSound;
+    [SerializeField] AudioClip pickUpSound;
+    [SerializeField] AudioClip paintSound;
 
     private void Start()
     {
@@ -55,15 +76,16 @@ public class PlayerController : MonoBehaviour
         rb.mass = 1f;
         rb.linearDamping = 0f;
 
+        meshMaTancada.enabled = false;
 
-        sargantanaMeshRenderer = GameObject.Find("SargantanaAgafada").GetComponent<MeshRenderer>();
-        particulesSargantana = gameObject.GetComponentInChildren<ParticleSystem>();
+        audioSource = gameObject.GetComponent<AudioSource>();
 
-        sargantanaMeshRenderer.enabled = false;
     }
 
     private void Update()
     {
+        if (isOnMenuMode) return;
+
         HandleMouseLook();
 
         if (frozen) return;
@@ -71,51 +93,61 @@ public class PlayerController : MonoBehaviour
         HandleMovementInput();
         CheckGround();
 
-<<<<<<< HEAD
-        if (Mouse.current.leftButton.wasPressedThisFrame && tutorialDone) //si clica el boto esquerre
-=======
-
-        if (!sargantanaAgafada && Mouse.current.leftButton.wasPressedThisFrame)
->>>>>>> f32bcee7934d7e9aa015418e4642ec2baf041dd2
+        if (Mouse.current.leftButton.wasPressedThisFrame && tutorialDone)
         {
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
-            RaycastHit hit; //tira un raig
+            RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, pickupRange, pickupLayerMask) && !sargantanaAgafada) //si el raig colisiona con un objeto dentro del rango y en la capa correcta
+            if (Physics.SphereCast(ray.origin, sphereRadius, ray.direction, out hit, pickupRange, pickupLayerMask) && !sargantanaAgafada)
             {
                 if (hit.collider.CompareTag("sargantana"))
                 {
-                    Debug.Log("Recojer");
-
                     Drac drac = hit.collider.gameObject.GetComponent<Drac>();
-
                     if (drac != null)
-                    {
                         colorPicked.DragonPicked(drac);
-                    }
-
                     Recollir(hit.collider.gameObject);
                 }
-                else
-                {
-                    Debug.Log("El objeto no es recogible: " + hit.collider.name);
-                }
             }
-            if (Physics.Raycast(ray, out hit, pickupRange, scultureMask) && sargantanaAgafada && isOnPaintZone)
+
+            if (!sargantanaAgafada)
+            {
+                manotazo.Ejecutar();
+                audioSource.PlayOneShot(handSound);
+            }
+
+            if (Physics.SphereCast(ray.origin, sphereRadius, ray.direction, out hit, pickupRange, scultureMask) && sargantanaAgafada && isOnPaintZone)
             {
                 if (hit.collider.CompareTag("sculture"))
                 {
-                    ChangeColor changeColor = hit.collider.gameObject.GetComponent<ChangeColor>();
-
-                    if (changeColor != null)
+                    WhatColorAmI whatColor = hit.collider.gameObject.GetComponent<WhatColorAmI>();
+                    if (whatColor != null)
                     {
-                        changeColor.ChangeColorSculture(colorPicked.currentColor);
+                        bool eraPintada = whatColor.IsPainted; 
+                        whatColor.TryPaint(colorPicked.colorSO);
+                        audioSource.PlayOneShot(paintSound);
+
+                        if (whatColor.IsPainted && !eraPintada)
+                        {
+                            ParticleSystem ps = Instantiate(particulesImpacteCorrecte, hit.point, Quaternion.LookRotation(hit.normal));
+                            
+                            var main = ps.main;
+                            main.startColor = whatColor.GetValidColor().color;
+
+                            ps.Play();
+                            Destroy(ps.gameObject, ps.main.duration + ps.main.startLifetime.constantMax);
+                        }
+
                         Soltar();
                     }
                 }
             }
         }
-        else if (Mouse.current.leftButton.wasPressedThisFrame && !isOnPaintZone && tutorialDone) // Si el jugador hace clic izquierdo mientras no está en una zona de pintura, suelta la sargantana
+        if(Mouse.current.rightButton.wasPressedThisFrame && !isOnPaintZone && tutorialDone && sargantanaAgafada)
+        {
+            Debug.Log("");
+            Soltar();
+        }
+        else if (Mouse.current.leftButton.wasPressedThisFrame && isOnPaintZone && tutorialDone && sargantanaAgafada)
         {
             Soltar();
         }
@@ -123,7 +155,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(frozen) return;
+        if (frozen) return;
         // Aplicar movimiento en FixedUpdate para física coherente
         ApplyMovement();
         ApplyGravity();
@@ -134,12 +166,12 @@ public class PlayerController : MonoBehaviour
     {
         PunteroImage.sprite = puntero1;
 
-        Ray ray = playerCamera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
+        Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, pickupRange, pickupLayerMask))
         {
-            if (hit.collider.CompareTag("sargantana"))
+            if (hit.collider.CompareTag("sargantana") && !sargantanaAgafada)
             {
                 PunteroImage.sprite = puntero2;
             }
@@ -149,15 +181,43 @@ public class PlayerController : MonoBehaviour
     private void Recollir(GameObject sargantanaGameObject)
     {
         Destroy(sargantanaGameObject);
-        sargantanaMeshRenderer.enabled = true;
+        sargantanaAgafadaInstance = Instantiate(
+            sargantanaAgafadaPrefab,
+            sargantanaSpawn
+        );
+        sargantanaAgafadaInstance.GetComponent<ChangeColor>().ChangeColorSargantana(colorPicked.currentColor);
+        sargantanaAgafadaInstance.transform.localPosition = Vector3.zero;
+        sargantanaAgafadaInstance.transform.localRotation = Quaternion.identity;
         sargantanaAgafada = true;
+
+        meshMaTancada.enabled = true;
+
+        audioSource.PlayOneShot(pickUpSound);
+
     }
 
     private void Soltar()
     {
+        if (sargantanaAgafadaInstance != null)
+            Destroy(sargantanaAgafadaInstance);
+
         sargantanaAgafada = false;
-        sargantanaMeshRenderer.enabled = false;
+
+        // Força alpha 1 per les partícules
+        Color colorParticules = colorPicked.currentColor;
+        colorParticules.a = 1f;
+
+        var main1 = particulesSargantana.main;
+        main1.startColor = colorParticules;
+        particulesSargantana.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         particulesSargantana.Play();
+
+        var main2 = particulesChorro.main;
+        main2.startColor = colorParticules;
+        particulesChorro.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        particulesChorro.Play();
+
+        meshMaTancada.enabled = false;
     }
 
     private void HandleMouseLook()
@@ -181,8 +241,32 @@ public class PlayerController : MonoBehaviour
 
         // Dirección relativa a la orientación del jugador
         Vector3 inputDirection = (transform.right * horizontal + transform.forward * vertical).normalized;
+
         float currentSpeed = Input.GetKey(KeyCode.LeftShift) ? runSpeed : walkSpeed;
+
         moveDirection = inputDirection * currentSpeed;
+
+        // // SONIDO PASOS
+        // bool isMoving = inputDirection.magnitude > 0.1f;
+
+        // if (isMoving && isGrounded)
+        // {
+        //     if (!audioSource.isPlaying)
+        //     {
+        //         audioSource.clip = stepSound;
+        //         audioSource.loop = true;
+        //         audioSource.Play();
+        //     }
+
+        //     audioSource.pitch = Input.GetKey(KeyCode.LeftShift) ? 1.4f : 1f;
+        // }
+        // else
+        // {
+        //     if (audioSource.isPlaying)
+        //     {
+        //         audioSource.Stop();
+        //     }
+        // }
     }
 
     private void ApplyMovement()
@@ -214,25 +298,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // Opcional: liberar cursor con Escape
-    private void UpdateCursorLock()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
-        }
-        else if (Input.GetMouseButtonDown(0) && Cursor.lockState == CursorLockMode.None)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-    }
+    // Deixar comentat
+    // private void UpdateCursorLock()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.Escape))
+    //     {
+    //         Cursor.lockState = CursorLockMode.None;
+    //         Cursor.visible = true;
+    //     }
+    //     else if (Input.GetMouseButtonDown(0) && Cursor.lockState == CursorLockMode.None)
+    //     {
+    //         Cursor.lockState = CursorLockMode.Locked;
+    //         Cursor.visible = false;
+    //     }
+    // }
 
-    private void LateUpdate()
-    {
-        UpdateCursorLock();
-    }
+    // private void LateUpdate()
+    // {
+    //     UpdateCursorLock();
+    // }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -260,6 +344,6 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = Vector3.zero;
             rb.isKinematic = value; // Si está congelado, no aplicar física
         }
-           
+
     }
 }

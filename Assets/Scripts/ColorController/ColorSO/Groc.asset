@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e4906793292e7446b96fbb33001ba8f, type: 3}
   m_Name: Groc
   m_EditorClassIdentifier: 
-  color: {r: 0.92993367, g: 1, b: 0, a: 0}
+  color: {r: 0.88235295, g: 0.9490196, b: 0.44705883, a: 1}
   colorName: Groc

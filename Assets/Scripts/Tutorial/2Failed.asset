@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1422c03e1ba9c014fb24d9393cd983ce, type: 3}
+  m_Name: 2Failed
+  m_EditorClassIdentifier: 
+  lines:
+  - text: "Queee? Qu\xE8 ha passat ara?"
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "No eres tan r\xE0pid fa un moment?"
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "Els colors canvien m\xE9s de pressa, s\xED... per\xF2 tampoc cal entrar
+      en p\xE0nic!"
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "La meva amiga taronja diu que t\u2019ha vist donar tres voltes al sobre
+      la mateixa sargantana sense saber on anar."
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "Respira! Mira la font, pensa el color que necessites i DESPR\xC9S corre!"
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
+  - text: "Perqu\xE8 si continues aix\xED, el drac acabar\xE0 semblant una patata
+      gegant..."
+    cameraPointIndex: -1
+    cameraHoldSeconds: 0
