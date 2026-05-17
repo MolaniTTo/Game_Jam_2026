@@ -15,6 +15,12 @@ public class VisualDracColor : MonoBehaviour
 
     [Header("UI Contorn")]
     [SerializeField] private ContornColorController contornColor;
+
+    [Header("Visual ajuda")]
+    [SerializeField, Range(0f, 1f)] private float alphaAjuda = 0.3f;
+
+    private HashSet<ColorSO> colorsCompletats = new HashSet<ColorSO>();
+
     public ColorSO ColorActiu { get; private set; }
 
     private List<ColorSO> paleta;
@@ -35,9 +41,21 @@ public class VisualDracColor : MonoBehaviour
         if (colorLight != null) colorLight.enabled = false;
     }
 
+    public void MarcarColorComplet(ColorSO color)
+    {
+        colorsCompletats.Add(color);
+    }
+
+    private Color ColorMesClar(Color color, float quantitat)
+    {
+        // quantitat: 0 = color pur, 1 = blanc total
+        return Color.Lerp(color, Color.white, quantitat);
+    }
+
     public void IniciarCicle()
     {
         if (cicleCoroutine != null) StopCoroutine(cicleCoroutine);
+        colorsCompletats.Clear();
         paleta = new List<ColorSO>(RoundController.Instance.colorsResultat);
         totesPeces = RoundController.Instance.whatColorAmI;
         if (colorLight != null) colorLight.enabled = false;
@@ -67,9 +85,35 @@ public class VisualDracColor : MonoBehaviour
 
         while (true)
         {
+            // Filtra els colors que encara no estan completats
+            List<int> indexosDisponibles = new List<int>();
+            for (int i = 0; i < paleta.Count; i++)
+            {
+                if (!colorsCompletats.Contains(paleta[i]))
+                    indexosDisponibles.Add(i);
+            }
+
+            // Si tots els colors estan completats, para el cicle
+            if (indexosDisponibles.Count == 0)
+            {
+                if (colorLight != null) colorLight.enabled = false;
+                if (contornColor != null) contornColor.Amagar();
+                yield break;
+            }
+
+            // Escull un color disponible que no sigui l'últim
             int nouIndex;
-            do { nouIndex = Random.Range(0, paleta.Count); }
-            while (nouIndex == ultimIndex && paleta.Count > 1);
+            if (indexosDisponibles.Count == 1)
+            {
+                nouIndex = indexosDisponibles[0];
+            }
+            else
+            {
+                int pick;
+                do { pick = Random.Range(0, indexosDisponibles.Count); }
+                while (paleta.IndexOf(paleta[indexosDisponibles[pick]]) == ultimIndex);
+                nouIndex = indexosDisponibles[pick];
+            }
 
             ultimIndex = nouIndex;
             indexColorActiu = nouIndex;
@@ -86,10 +130,8 @@ public class VisualDracColor : MonoBehaviour
                 colorLight.color = ColorActiu.color;
             }
 
-            // Fase normal — sense parpadeo UI
             yield return StartCoroutine(FaseNormal(ColorActiu, tempsNormal));
 
-            // Fase parpadeo — activa el contorn UI al mateix temps
             if (contornColor != null)
                 contornColor.IniciarParpadeo(ColorActiu.color, tempsParpadeixRapid);
 
@@ -135,12 +177,15 @@ public class VisualDracColor : MonoBehaviour
         }
     }
 
-    private void SetColorPeces(ColorSO colorActiu, Color color)
+   private void SetColorPeces(ColorSO colorActiu, Color color)
     {
         if (totesPeces == null) return;
+
+        Color colorFinal = ColorMesClar(color, alphaAjuda);
+
         foreach (WhatColorAmI peca in totesPeces)
             if (!peca.IsPainted && peca.GetValidColor() == colorActiu)
-                peca.GetComponent<ChangeColor>().ChangeColorSculture(color);
+                peca.GetComponent<ChangeColor>().ChangeColorSculture(colorFinal);
     }
 
     private void ResetPecesColor(ColorSO colorActiu)

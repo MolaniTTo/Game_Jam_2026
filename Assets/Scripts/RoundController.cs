@@ -95,18 +95,39 @@ public class RoundController : MonoBehaviour
     {
         if (colorsResultat == null || colorsResultat.Count == 0 || groupMap == null || groupMap.Count == 0) return;
 
-        List<ColorSO> colorsBarrejats = colorsResultat
-            .OrderBy(_ => UnityEngine.Random.value)
-            .ToList();
+        List<int> grupIds = new List<int>(groupMap.Keys);
+        int numGrups = grupIds.Count;
+        int numColors = colorsResultat.Count;
 
-        int i = 0;
-        foreach (var kvp in groupMap)
+        // Crea una llista que cobreixi tots els grups repartint els colors equilibradament
+        List<ColorSO> colorsAssignats = new List<ColorSO>();
+        for (int i = 0; i < numGrups; i++)
+            colorsAssignats.Add(colorsResultat[i % numColors]);
+
+        // Barreja per que no quedi en ordre
+        for (int i = colorsAssignats.Count - 1; i > 0; i--)
         {
-            ColorSO colorAssignat = colorsBarrejats[i % colorsBarrejats.Count];
-            foreach (var piece in kvp.Value)
-                piece.SetValidColor(colorAssignat);
-            i++;
+            int j = UnityEngine.Random.Range(0, i + 1);
+            (colorsAssignats[i], colorsAssignats[j]) = (colorsAssignats[j], colorsAssignats[i]);
         }
+
+        // Assigna cada color al seu grup
+        for (int i = 0; i < numGrups; i++)
+        {
+            ColorSO colorAssignat = colorsAssignats[i];
+            foreach (var piece in groupMap[grupIds[i]])
+                piece.SetValidColor(colorAssignat);
+        }
+
+        // Debug per verificar que tots els colors han estat assignats
+        Dictionary<ColorSO, int> comptador = new Dictionary<ColorSO, int>();
+        foreach (var color in colorsAssignats)
+        {
+            if (!comptador.ContainsKey(color)) comptador[color] = 0;
+            comptador[color]++;
+        }
+        foreach (var kvp in comptador)
+            Debug.Log($"Color {kvp.Key.name}: {kvp.Value} grups assignats");
     }
 
     public void PaintGroup(WhatColorAmI triggeredPiece, ColorSO color)

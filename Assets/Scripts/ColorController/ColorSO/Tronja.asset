@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e4906793292e7446b96fbb33001ba8f, type: 3}
   m_Name: Tronja
   m_EditorClassIdentifier: 
-  color: {r: 1, g: 0.73333335, b: 0.33333334, a: 0}
+  color: {r: 1, g: 0.73333335, b: 0.33333334, a: 1}
   colorName: Tronja

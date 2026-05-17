@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e4906793292e7446b96fbb33001ba8f, type: 3}
   m_Name: VerdFort
   m_EditorClassIdentifier: 
-  color: {r: 0.2489142, g: 0.4339623, b: 0.20265219, a: 0}
+  color: {r: 0.2489142, g: 0.4339623, b: 0.20265219, a: 1}
   colorName: VerdFort

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e4906793292e7446b96fbb33001ba8f, type: 3}
   m_Name: Lila
   m_EditorClassIdentifier: 
-  color: {r: 1, g: 0.5518868, b: 0.98590845, a: 0}
+  color: {r: 0.9339623, g: 0.6035511, b: 0.923572, a: 1}
   colorName: Lila

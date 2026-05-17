@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class RoundManager : MonoBehaviour
 {
@@ -10,13 +11,14 @@ public class RoundManager : MonoBehaviour
     [System.Serializable]
     public class RondaConfig
     {
-        public TutorialEntry tutorialEntry;        // diàleg primera vegada
-        public TutorialEntry tutorialEntryRetry;   // diàleg si repeteixes la ronda
+        public TutorialEntry tutorialEntry;
+        public TutorialEntry tutorialEntryRetry;
         public List<PaletteSO> paletesPossibles;
         public int maxSargantanas;
         public float tempsRonda;
         public float speed;
         public Transform playerSpawnPoint;
+        public ProgressColorHUD hudPrefabRonda; // prefab HUD específic per aquesta ronda
     }
 
     [Header("Configuració de rondes")]
@@ -29,11 +31,21 @@ public class RoundManager : MonoBehaviour
     [SerializeField] private TempsRestant tempsRestant;
     [SerializeField] private PlayerController playerController;
     [SerializeField] private VisualDracColor visualDracColor;
+    [SerializeField] private ScreenFade screenFade;
+    [SerializeField] private GameObject timerObj;
+
+    [Header("Final del joc")]
+    [SerializeField] private string nomEscenaFinal = "Credits";
+    [SerializeField] private float tempsEntrePeces = 0.1f; // temps entre cada peça que es pinta
+    [SerializeField] private float tempsAbansCanviEscena = 2f;
 
     private int currentRoundIndex = 0;
     private bool rondaActiva = false;
     private bool transitant = false;
-    private bool primerCopRonda = true; // true = primera vegada, false = reintent
+    private bool primerCopRonda = true;
+
+    private ProgressColorHUD hudActiu = null; // HUD actiu ara mateix
+    private bool EsUltimaRonda => currentRoundIndex >= rondes.Count - 1; 
 
     void Awake()
     {
@@ -43,6 +55,7 @@ public class RoundManager : MonoBehaviour
 
     private void Start()
     {
+        screenFade.FadeIn();
         IniciarRonda(0, primerCop: true);
     }
 
@@ -53,6 +66,15 @@ public class RoundManager : MonoBehaviour
             Debug.Log("[RoundManager] Totes les rondes completades!");
             return;
         }
+
+        // Desactiva HUD anterior
+        if (hudActiu != null)
+        {
+            hudActiu.Reset();
+            hudActiu.gameObject.SetActive(false);
+            hudActiu = null;
+        }
+        if (timerObj != null) timerObj.SetActive(false);
 
         currentRoundIndex = index;
         primerCopRonda = primerCop;
@@ -77,9 +99,15 @@ public class RoundManager : MonoBehaviour
         roundController.SetPaletes(config.paletesPossibles);
         roundController.IniciarRonda(currentRoundIndex);
         dracSpawner.ConfigurarRonda(config.maxSargantanas, config.speed);
-        tempsRestant.ConfigurarRonda(config.tempsRonda);
 
-        // Escull el diàleg segons si és reintent o no
+        // Si és l'última ronda, pinta el drac i arranca el diàleg final
+        if (EsUltimaRonda)
+        {
+            StartCoroutine(SequenciaFinal(config));
+            return;
+        }
+
+        // Comportament normal
         TutorialEntry entryAMostrar = (primerCop || config.tutorialEntryRetry == null)
             ? config.tutorialEntry
             : config.tutorialEntryRetry;
@@ -87,19 +115,52 @@ public class RoundManager : MonoBehaviour
         tutorialSequencer.StartRonda(entryAMostrar, OnTutorialAcabat);
     }
 
+    private void ActivarHUD(RondaConfig config)
+    {
+        if (timerObj != null)
+        {
+            timerObj.SetActive(true);
+        }
+        // Desactiva el HUD anterior
+        if (hudActiu != null)
+        {
+            hudActiu.Reset();
+            hudActiu.gameObject.SetActive(false);
+        }
+
+        // Activa el nou
+        if (config.hudPrefabRonda != null)
+        {
+            hudActiu = config.hudPrefabRonda;
+            hudActiu.gameObject.SetActive(true);
+        }
+    }
+
     private void OnTutorialAcabat()
     {
+        RondaConfig config = rondes[currentRoundIndex];
+        ActivarHUD(config);
+        // Comportament normal
+        tempsRestant.ConfigurarRonda(config.tempsRonda);
+        if (hudActiu != null)
+            hudActiu.Inicialitzar(roundController.colorsResultat, roundController.whatColorAmI);
+
         rondaActiva = true;
         dracSpawner.StartSpawning();
         tempsRestant.StartTimer();
-        visualDracColor.IniciarCicle(); // arranca el visual DESPRÉS del tutorial
+        visualDracColor.IniciarCicle();
+    }
+
+    // Cridat per WhatColorAmI quan una peça es pinta correctament
+    public void NotificarPecaPintada(ColorSO color)
+    {
+        hudActiu?.NotificarPecaPintada(color);
     }
 
     public void OnTempsAcabat()
     {
         if (!rondaActiva || transitant) return;
         transitant = true;
-        Debug.Log("[RoundManager] Temps acabat — repetint ronda");
         StartCoroutine(TransicioRonda(completada: false));
     }
 
@@ -107,7 +168,6 @@ public class RoundManager : MonoBehaviour
     {
         if (!rondaActiva || transitant) return;
         transitant = true;
-        Debug.Log("[RoundManager] Figura completada!");
         StartCoroutine(TransicioRonda(completada: true));
     }
 
@@ -118,15 +178,48 @@ public class RoundManager : MonoBehaviour
         dracSpawner.StopSpawning();
         visualDracColor.AturaciCicle();
 
+        screenFade.FadeOut();
+        yield return new WaitForSeconds(screenFade.fadeDuration);
+
         foreach (var s in GameObject.FindGameObjectsWithTag("sargantana"))
             Destroy(s);
-
-        yield return new WaitForSeconds(1.5f);
 
         if (completada)
             IniciarRonda(currentRoundIndex + 1, primerCop: true);
         else
-            IniciarRonda(currentRoundIndex, primerCop: false); // mateixa ronda, reintent
+            IniciarRonda(currentRoundIndex, primerCop: false);
+
+        yield return new WaitForSeconds(0.2f);
+        screenFade.FadeIn();
+    }
+
+    private IEnumerator SequenciaFinal(RondaConfig config)
+    {
+        // Pinta totes les peces una per una
+        foreach (WhatColorAmI peca in roundController.whatColorAmI)
+        {
+            ColorSO color = peca.GetValidColor();
+            if (color != null)
+                peca.PaintDirect(color);
+            yield return new WaitForSeconds(tempsEntrePeces);
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        // Ara arranca el diàleg final
+        TutorialEntry entryFinal = config.tutorialEntry;
+        tutorialSequencer.StartRonda(entryFinal, () =>
+        {
+            StartCoroutine(FinalAmbFade());
+        });
+    }
+
+    private IEnumerator FinalAmbFade()
+    {
+        yield return new WaitForSeconds(tempsAbansCanviEscena);
+        screenFade.FadeOut();
+        yield return new WaitForSeconds(screenFade.fadeDuration);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(nomEscenaFinal);
     }
 
     public int GetCurrentRoundIndex() => currentRoundIndex;

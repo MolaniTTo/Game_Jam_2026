@@ -47,6 +47,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] MeshRenderer meshMaTancada;
 
+    [Header("SphereCast")]
+    [SerializeField] private float sphereRadius = 0.3f;
+
     private void Start()
     {
         // Bloquear cursor
@@ -79,43 +82,29 @@ public class PlayerController : MonoBehaviour
         HandleMovementInput();
         CheckGround();
 
-        if (Mouse.current.leftButton.wasPressedThisFrame && tutorialDone) //si clica el boto esquerre
+        if (Mouse.current.leftButton.wasPressedThisFrame && tutorialDone)
         {
-
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
-            RaycastHit hit; //tira un raig
+            RaycastHit hit;
 
-            if (Physics.Raycast(ray, out hit, pickupRange, pickupLayerMask) && !sargantanaAgafada) //si el raig colisiona con un objeto dentro del rango y en la capa correcta
+            if (Physics.SphereCast(ray.origin, sphereRadius, ray.direction, out hit, pickupRange, pickupLayerMask) && !sargantanaAgafada)
             {
                 if (hit.collider.CompareTag("sargantana"))
                 {
-                    Debug.Log("Recojer");
-
                     Drac drac = hit.collider.gameObject.GetComponent<Drac>();
-
                     if (drac != null)
-                    {
                         colorPicked.DragonPicked(drac);
-                    }
-
                     Recollir(hit.collider.gameObject);
-                }
-                else
-                {
-                    Debug.Log("El objeto no es recogible: " + hit.collider.name);
                 }
             }
 
             if (!sargantanaAgafada)
-            {
                 manotazo.Ejecutar();
-            }
 
-            if (Physics.Raycast(ray, out hit, pickupRange, scultureMask) && sargantanaAgafada && isOnPaintZone)
+            if (Physics.SphereCast(ray.origin, sphereRadius, ray.direction, out hit, pickupRange, scultureMask) && sargantanaAgafada && isOnPaintZone)
             {
                 if (hit.collider.CompareTag("sculture"))
                 {
-                    Debug.Log("Pintar");
                     WhatColorAmI whatColor = hit.collider.gameObject.GetComponent<WhatColorAmI>();
                     if (whatColor != null)
                     {
@@ -124,9 +113,8 @@ public class PlayerController : MonoBehaviour
                     }
                 }
             }
-
         }
-        else if (Mouse.current.leftButton.wasPressedThisFrame && !isOnPaintZone && tutorialDone) // Si el jugador hace clic izquierdo mientras no está en una zona de pintura, suelta la sargantana
+        else if (Mouse.current.leftButton.wasPressedThisFrame && !isOnPaintZone && tutorialDone)
         {
             Soltar();
         }
@@ -173,25 +161,29 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    private void Soltar()
+   private void Soltar()
     {
         if (sargantanaAgafadaInstance != null)
-        {
             Destroy(sargantanaAgafadaInstance);
-        }
+
         sargantanaAgafada = false;
 
-        Debug.Log("Ejecutar Particulas");
+        // Força alpha 1 per les partícules
+        Color colorParticules = colorPicked.currentColor;
+        colorParticules.a = 1f;
+
         var main1 = particulesSargantana.main;
-        main1.startColor = colorPicked.currentColor;
+        main1.startColor = colorParticules;
+        particulesSargantana.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         particulesSargantana.Play();
 
         var main2 = particulesChorro.main;
-        main2.startColor = colorPicked.currentColor;
+        main2.startColor = colorParticules;
+        particulesChorro.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         particulesChorro.Play();
 
         meshMaTancada.enabled = false;
-    }
+    }   
 
     private void HandleMouseLook()
     {

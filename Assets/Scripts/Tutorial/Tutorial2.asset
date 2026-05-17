@@ -24,7 +24,7 @@ MonoBehaviour:
     cameraPointIndex: -1
     cameraHoldSeconds: 0
   - text: "Ara el trencad\xEDs est\xE0 encara pitjor que abans..."
-    cameraPointIndex: 0
+    cameraPointIndex: -1
     cameraHoldSeconds: 0
   - text: "Han aparegut molts m\xE9s colors i cada vegada queden menys sargantanes
       tranquil\xB7les pel parc."

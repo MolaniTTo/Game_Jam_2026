@@ -42,6 +42,8 @@ public class WhatColorAmI : MonoBehaviour
             if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
             changeColor.ChangeColorSculture(validColor.color);
             RoundController.Instance.PaintGroup(this, validColor);
+            RoundManager.Instance?.NotificarPecaPintada(validColor);
+            CheckColorComplet();
         }
         else
         {
@@ -51,12 +53,28 @@ public class WhatColorAmI : MonoBehaviour
         }
     }
 
+    private void CheckColorComplet()
+    {
+        if (RoundController.Instance == null) return;
+
+        // Comprova si totes les peces d'aquest color estan pintades
+        foreach (WhatColorAmI peca in RoundController.Instance.whatColorAmI)
+        {
+            if (peca.GetValidColor() == validColor && !peca.IsPainted)
+                return; // encara en queda alguna sense pintar
+        }
+
+        Debug.Log($"Color {validColor.name} complet!");
+        VisualDracColor.Instance?.MarcarColorComplet(validColor);
+    }
+
     public void PaintDirect(ColorSO color)
     {
         if (isPainted) return;
         isPainted = true;
         if (fadeCoroutine != null) StopCoroutine(fadeCoroutine);
         changeColor.ChangeColorSculture(color.color);
+        RoundManager.Instance?.NotificarPecaPintada(color); 
     }
 
     public void ResetPece()
