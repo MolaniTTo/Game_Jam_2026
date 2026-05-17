@@ -883,8 +883,8 @@ MonoBehaviour:
   crossfadeSource: {fileID: 978119844}
   menuMusic: {fileID: 8300000, guid: f3e1324177df4ee418d5463c5f96ae59, type: 3}
   baseMusic: {fileID: 8300000, guid: 969073487ec33be4b858321282cb57b7, type: 3}
-  TutorialDialogue: {fileID: 0}
-  TutorialFailed: {fileID: 0}
+  TutorialDialogue: {fileID: 8300000, guid: 247ceb8310853db4093d7f2b0df7a2c1, type: 3}
+  TutorialFailed: {fileID: 8300000, guid: 74b68b14577cd9041aa75124b73d8b6f, type: 3}
   Win: {fileID: 0}
   defaultVolume: 0.7
   defaultFadeTime: 1

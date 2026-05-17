@@ -23,7 +23,7 @@ public class DialogueMusicController : MonoBehaviour
         }
     }
 
-    public void StartDialogueMusic() //ho cridarem desde el gorila quan acaba WakeUp i desde el monje quan li tira el primer raig
+    public void StartDialogueMusic() 
     {
         if (musicStarted) return;
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -45,6 +46,7 @@ public class RoundManager : MonoBehaviour
     private bool primerCopRonda = true;
 
     private ProgressColorHUD hudActiu = null; // HUD actiu ara mateix
+    public TextMeshPro rondaText; // Text que mostra el número de ronda actual
     private bool EsUltimaRonda => currentRoundIndex >= rondes.Count - 1; 
 
     void Awake()
@@ -77,6 +79,7 @@ public class RoundManager : MonoBehaviour
         if (timerObj != null) timerObj.SetActive(false);
 
         currentRoundIndex = index;
+        ActualitzarTextRonda();
         primerCopRonda = primerCop;
         rondaActiva = false;
         transitant = false;
@@ -233,4 +236,10 @@ public class RoundManager : MonoBehaviour
     }
 
     public int GetCurrentRoundIndex() => currentRoundIndex;
+
+    private void ActualitzarTextRonda()
+    {
+        if (rondaText != null)
+            rondaText.text = "Ronda: " + (currentRoundIndex + 1);
+    }
 }

@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Sprite puntero2;
 
     [SerializeField] MeshRenderer meshMaTancada;
+    [SerializeField] ParticleSystem particulesImpacteCorrecte;
 
 
     [Header("SphereCast")]
@@ -121,14 +122,32 @@ public class PlayerController : MonoBehaviour
                     WhatColorAmI whatColor = hit.collider.gameObject.GetComponent<WhatColorAmI>();
                     if (whatColor != null)
                     {
+                        bool eraPintada = whatColor.IsPainted; 
                         whatColor.TryPaint(colorPicked.colorSO);
                         audioSource.PlayOneShot(paintSound);
+
+                        if (whatColor.IsPainted && !eraPintada)
+                        {
+                            ParticleSystem ps = Instantiate(particulesImpacteCorrecte, hit.point, Quaternion.LookRotation(hit.normal));
+                            
+                            var main = ps.main;
+                            main.startColor = whatColor.GetValidColor().color;
+
+                            ps.Play();
+                            Destroy(ps.gameObject, ps.main.duration + ps.main.startLifetime.constantMax);
+                        }
+
                         Soltar();
                     }
                 }
             }
         }
-        else if (Mouse.current.leftButton.wasPressedThisFrame && !isOnPaintZone && tutorialDone)
+        if(Mouse.current.rightButton.wasPressedThisFrame && !isOnPaintZone && tutorialDone && sargantanaAgafada)
+        {
+            Debug.Log("");
+            Soltar();
+        }
+        else if (Mouse.current.leftButton.wasPressedThisFrame && isOnPaintZone && tutorialDone && sargantanaAgafada)
         {
             Soltar();
         }

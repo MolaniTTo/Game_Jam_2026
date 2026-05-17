@@ -20,6 +20,8 @@ public class ColorActiuIndicator : MonoBehaviour
         ColorSO colorActiu = VisualDracColor.Instance.ColorActiu;
         float tempsRestant = VisualDracColor.Instance.TempsRestantColor;
 
+        Debug.Log($"ColorActiu: {colorActiu?.name}, TempsRestant: {tempsRestant}"); // TEMPORAL
+
         if (colorActiu == null || tempsRestant > segonesAbansFinal)
         {
             SetAlpha(0f);
