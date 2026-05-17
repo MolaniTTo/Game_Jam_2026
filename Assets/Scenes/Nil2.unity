@@ -245312,11 +245312,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 935791967}
   m_Mesh: {fileID: 944289460374817710, guid: bdebb71df0f78d34eb6436a6e50d48d4, type: 3}
---- !u!198 &935802560 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 3800249845895635951, guid: b4f6472cca984e54486bfc68d0741e00, type: 3}
-  m_PrefabInstance: {fileID: 3166818998428532776}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &936015665
 GameObject:
   m_ObjectHideFlags: 0
@@ -556611,44 +556606,28 @@ PrefabInstance:
     m_TransformParent: {fileID: 1547315735}
     m_Modifications:
     - target: {fileID: 2583556370335554773, guid: b4f6472cca984e54486bfc68d0741e00, type: 3}
+      propertyPath: handSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 4c5b6070a4de85441a5921859880d2d7, type: 3}
+    - target: {fileID: 2583556370335554773, guid: b4f6472cca984e54486bfc68d0741e00, type: 3}
+      propertyPath: stepSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 420e63cd8e0253841b2516f5693bc270, type: 3}
+    - target: {fileID: 2583556370335554773, guid: b4f6472cca984e54486bfc68d0741e00, type: 3}
+      propertyPath: paintSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 6c4ac6605c3504b47bc7a587aa5b73d9, type: 3}
+    - target: {fileID: 2583556370335554773, guid: b4f6472cca984e54486bfc68d0741e00, type: 3}
+      propertyPath: pickUpSound
+      value: 
+      objectReference: {fileID: 8300000, guid: c6dcea4a3e9e1ab4ba9b63e59d6ef871, type: 3}
+    - target: {fileID: 2583556370335554773, guid: b4f6472cca984e54486bfc68d0741e00, type: 3}
       propertyPath: PunteroImage
       value: 
       objectReference: {fileID: 350464586}
-    - target: {fileID: 2583556370335554773, guid: b4f6472cca984e54486bfc68d0741e00, type: 3}
-      propertyPath: particulesChorro
-      value: 
-      objectReference: {fileID: 935802560}
     - target: {fileID: 3637192951959808528, guid: b4f6472cca984e54486bfc68d0741e00, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 3800249845895635951, guid: b4f6472cca984e54486bfc68d0741e00, type: 3}
-      propertyPath: moveWithTransform
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3800249845895635951, guid: b4f6472cca984e54486bfc68d0741e00, type: 3}
-      propertyPath: CollisionModule.type
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3800249845895635951, guid: b4f6472cca984e54486bfc68d0741e00, type: 3}
-      propertyPath: ShapeModule.radius.value
-      value: 0.1420145
-      objectReference: {fileID: 0}
-    - target: {fileID: 5110763349144196351, guid: b4f6472cca984e54486bfc68d0741e00, type: 3}
-      propertyPath: moveWithTransform
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6578743466318143178, guid: b4f6472cca984e54486bfc68d0741e00, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.324
-      objectReference: {fileID: 0}
-    - target: {fileID: 6578743466318143178, guid: b4f6472cca984e54486bfc68d0741e00, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -0.233
-      objectReference: {fileID: 0}
-    - target: {fileID: 6578743466318143178, guid: b4f6472cca984e54486bfc68d0741e00, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.679
       objectReference: {fileID: 0}
     - target: {fileID: 8886013465975280102, guid: b4f6472cca984e54486bfc68d0741e00, type: 3}
       propertyPath: m_LocalPosition.x
