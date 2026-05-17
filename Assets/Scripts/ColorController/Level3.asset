@@ -18,15 +18,19 @@ MonoBehaviour:
   - pieceNames:
     - P1
     - P2
+    - P20
   - pieceNames:
     - P3
     - P4
+    - P21
   - pieceNames:
     - P5
     - P6
+    - P18
   - pieceNames:
     - P7
     - P8
+    - P19
   - pieceNames:
     - P9
     - P10
@@ -39,14 +43,5 @@ MonoBehaviour:
     - P14
   - pieceNames:
     - P15
-  - pieceNames:
     - P16
-  - pieceNames:
     - P17
-  - pieceNames:
-    - P18
-  - pieceNames:
-    - P19
-    - P21
-  - pieceNames:
-    - P20

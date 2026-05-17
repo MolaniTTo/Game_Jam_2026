@@ -136,7 +136,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(frozen) return;
+        if (frozen) return;
         // Aplicar movimiento en FixedUpdate para física coherente
         ApplyMovement();
         ApplyGravity();
@@ -164,7 +164,7 @@ public class PlayerController : MonoBehaviour
         Destroy(sargantanaGameObject);
         sargantanaAgafadaInstance = Instantiate(
             sargantanaAgafadaPrefab,
-            sargantanaSpawn 
+            sargantanaSpawn
         );
         sargantanaAgafadaInstance.GetComponent<ChangeColor>().ChangeColorSargantana(colorPicked.currentColor);
         sargantanaAgafadaInstance.transform.localPosition = Vector3.zero;
@@ -174,10 +174,10 @@ public class PlayerController : MonoBehaviour
         meshMaTancada.enabled = true;
 
         audioSource.PlayOneShot(pickUpSound);
-        
+
     }
 
-   private void Soltar()
+    private void Soltar()
     {
         if (sargantanaAgafadaInstance != null)
             Destroy(sargantanaAgafadaInstance);
@@ -199,7 +199,7 @@ public class PlayerController : MonoBehaviour
         particulesChorro.Play();
 
         meshMaTancada.enabled = false;
-    }   
+    }
 
     private void HandleMouseLook()
     {
@@ -325,6 +325,6 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = Vector3.zero;
             rb.isKinematic = value; // Si está congelado, no aplicar física
         }
-           
+
     }
 }

@@ -665,6 +665,7 @@ GameObject:
   - component: {fileID: 978119846}
   - component: {fileID: 978119845}
   - component: {fileID: 978119844}
+  - component: {fileID: 978119848}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -880,8 +881,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicSource: {fileID: 978119845}
   crossfadeSource: {fileID: 978119844}
-  menuMusic: {fileID: 0}
-  baseMusic: {fileID: 0}
+  menuMusic: {fileID: 8300000, guid: f3e1324177df4ee418d5463c5f96ae59, type: 3}
+  baseMusic: {fileID: 8300000, guid: 969073487ec33be4b858321282cb57b7, type: 3}
   TutorialDialogue: {fileID: 0}
   TutorialFailed: {fileID: 0}
   Win: {fileID: 0}
@@ -902,6 +903,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &978119848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 978119843}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11caf6764b369f4438046c405bb58ef6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueMusicKey: Menu
+  returnMusicKey: Menu
+  fadeTime: 2
+  startOnAwake: 1
+  useTransitionMusic: 0
+  transitionMusicKey: Menu
 --- !u!1 &1157101797
 GameObject:
   m_ObjectHideFlags: 0

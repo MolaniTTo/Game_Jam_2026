@@ -8,10 +8,12 @@ public class VisualDracColor : MonoBehaviour
 
     [Header("Llum de color actiu")]
     [SerializeField] private Light colorLight;
+    [SerializeField] private Light colorLight1;
 
     [Header("Configuració de temps")]
-    [SerializeField] private float tempsParpadeixRapid = 5f; // canviat a 5 segons
-    [SerializeField] private float velocityLerp = 1f;
+    [SerializeField] private float tempsPerColor = 10f;
+    [SerializeField] private float intervalInici = 1.5f;   // interval de parpadeo al principi (lent)
+    [SerializeField] private float intervalFinal = 0.1f;   // interval de parpadeo al final (ràpid)
 
     [Header("UI Contorn")]
     [SerializeField] private ContornColorController contornColor;
@@ -20,15 +22,12 @@ public class VisualDracColor : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float alphaAjuda = 0.3f;
 
     private HashSet<ColorSO> colorsCompletats = new HashSet<ColorSO>();
-
     public ColorSO ColorActiu { get; private set; }
 
     private List<ColorSO> paleta;
     private List<WhatColorAmI> totesPeces;
     private int indexColorActiu = -1;
     private Coroutine cicleCoroutine;
-
-    
 
     private void Awake()
     {
@@ -39,6 +38,7 @@ public class VisualDracColor : MonoBehaviour
     private void Start()
     {
         if (colorLight != null) colorLight.enabled = false;
+        if (colorLight1 != null) colorLight1.enabled = false;
     }
 
     public void MarcarColorComplet(ColorSO color)
@@ -48,7 +48,6 @@ public class VisualDracColor : MonoBehaviour
 
     private Color ColorMesClar(Color color, float quantitat)
     {
-        // quantitat: 0 = color pur, 1 = blanc total
         return Color.Lerp(color, Color.white, quantitat);
     }
 
@@ -59,6 +58,7 @@ public class VisualDracColor : MonoBehaviour
         paleta = new List<ColorSO>(RoundController.Instance.colorsResultat);
         totesPeces = RoundController.Instance.whatColorAmI;
         if (colorLight != null) colorLight.enabled = false;
+        if (colorLight1 != null) colorLight1.enabled = false;
         cicleCoroutine = StartCoroutine(CicleColors());
     }
 
@@ -71,6 +71,7 @@ public class VisualDracColor : MonoBehaviour
             cicleCoroutine = null;
         }
         if (colorLight != null) colorLight.enabled = false;
+        if (colorLight1 != null) colorLight1.enabled = false;
         if (contornColor != null) contornColor.Amagar();
 
         if (totesPeces != null)
@@ -85,23 +86,21 @@ public class VisualDracColor : MonoBehaviour
 
         while (true)
         {
-            // Filtra els colors que encara no estan completats
+            // Filtra colors no completats
             List<int> indexosDisponibles = new List<int>();
             for (int i = 0; i < paleta.Count; i++)
-            {
                 if (!colorsCompletats.Contains(paleta[i]))
                     indexosDisponibles.Add(i);
-            }
 
-            // Si tots els colors estan completats, para el cicle
             if (indexosDisponibles.Count == 0)
             {
                 if (colorLight != null) colorLight.enabled = false;
+                if (colorLight1 != null) colorLight1.enabled = false;
                 if (contornColor != null) contornColor.Amagar();
                 yield break;
             }
 
-            // Escull un color disponible que no sigui l'últim
+            // Escull color
             int nouIndex;
             if (indexosDisponibles.Count == 1)
             {
@@ -121,71 +120,71 @@ public class VisualDracColor : MonoBehaviour
 
             RoundController.Instance.NotificarColorActiu(ColorActiu);
 
-            float tempsTotal = RoundController.Instance.tempsPerColor;
-            float tempsNormal = tempsTotal - tempsParpadeixRapid;
-
-            if (colorLight != null)
-            {
-                colorLight.enabled = true;
-                colorLight.color = ColorActiu.color;
-            }
-
-            yield return StartCoroutine(FaseNormal(ColorActiu, tempsNormal));
-
+            // Activa llums i contorn
+            SetLlums(true, ColorActiu.color);
             if (contornColor != null)
-                contornColor.IniciarParpadeo(ColorActiu.color, tempsParpadeixRapid);
+                contornColor.IniciarParpadeo(ColorActiu.color, tempsPerColor);
 
-            yield return StartCoroutine(FaseParpadeix(ColorActiu, tempsParpadeixRapid));
+            // Parpadeo progressiu durant tot el temps del color
+            yield return StartCoroutine(FaseParpadeoProgressiu(ColorActiu));
 
-            if (colorLight != null) colorLight.enabled = false;
+            // Neteja
+            SetLlums(false, Color.white);
             if (contornColor != null) contornColor.Amagar();
             ResetPecesColor(ColorActiu);
 
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.2f);
         }
     }
 
-    private IEnumerator FaseNormal(ColorSO colorActiu, float durada)
+    private IEnumerator FaseParpadeoProgressiu(ColorSO colorActiu)
     {
         float elapsed = 0f;
-        while (elapsed < 1f / velocityLerp)
-        {
-            elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed * velocityLerp);
-            SetColorPeces(colorActiu, Color.Lerp(Color.white, colorActiu.color, t));
-            yield return null;
-        }
-        SetColorPeces(colorActiu, colorActiu.color);
-        float tempsRestant = durada - (1f / velocityLerp);
-        if (tempsRestant > 0f)
-            yield return new WaitForSeconds(tempsRestant);
-    }
-
-    private IEnumerator FaseParpadeix(ColorSO colorActiu, float durada)
-    {
-        float elapsed = 0f;
-        float intervalRapid = 0.2f;
         bool visible = true;
 
-        while (elapsed < durada)
+        while (elapsed < tempsPerColor)
         {
+            // t va de 0 (inici) a 1 (final) — com més t, més ràpid
+            float t = elapsed / tempsPerColor;
+
+            // Interval actual interpolat entre lent i ràpid
+            float intervalActual = Mathf.Lerp(intervalInici, intervalFinal, t);
+
+            // Alterna visible/invisible
             visible = !visible;
-            SetColorPeces(colorActiu, visible ? colorActiu.color : Color.white);
-            if (colorLight != null) colorLight.enabled = visible;
-            yield return new WaitForSeconds(intervalRapid);
-            elapsed += intervalRapid;
+            Color colorVisual = visible ? ColorMesClar(colorActiu.color, alphaAjuda) : Color.white;
+            SetColorPeces(colorActiu, colorVisual);
+            SetLlums(visible, colorActiu.color);
+
+            yield return new WaitForSeconds(intervalActual);
+            elapsed += intervalActual;
+        }
+
+        // Assegura que acabi visible
+        SetColorPeces(colorActiu, ColorMesClar(colorActiu.color, alphaAjuda));
+        SetLlums(true, colorActiu.color);
+    }
+
+    private void SetLlums(bool actives, Color color)
+    {
+        if (colorLight != null)
+        {
+            colorLight.enabled = actives;
+            if (actives) colorLight.color = color;
+        }
+        if (colorLight1 != null)
+        {
+            colorLight1.enabled = actives;
+            if (actives) colorLight1.color = color;
         }
     }
 
-   private void SetColorPeces(ColorSO colorActiu, Color color)
+    private void SetColorPeces(ColorSO colorActiu, Color color)
     {
         if (totesPeces == null) return;
-
-        Color colorFinal = ColorMesClar(color, alphaAjuda);
-
         foreach (WhatColorAmI peca in totesPeces)
             if (!peca.IsPainted && peca.GetValidColor() == colorActiu)
-                peca.GetComponent<ChangeColor>().ChangeColorSculture(colorFinal);
+                peca.GetComponent<ChangeColor>().ChangeColorSculture(color);
     }
 
     private void ResetPecesColor(ColorSO colorActiu)

@@ -18,10 +18,10 @@ MonoBehaviour:
     m_Value: 0
   quality:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0.5
+    m_Value: 0.25
   clamp:
     m_OverrideState: 1
     m_Value: 0.05
@@ -65,10 +65,10 @@ MonoBehaviour:
     m_Value: 15
   gaussianEnd:
     m_OverrideState: 1
-    m_Value: 30
+    m_Value: 50
   gaussianMaxRadius:
     m_OverrideState: 0
-    m_Value: 1
+    m_Value: 1.264
   highQualitySampling:
     m_OverrideState: 0
     m_Value: 0
