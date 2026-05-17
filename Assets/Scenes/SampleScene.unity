@@ -1204,7 +1204,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 62b10c5d261cf4f4396f793f75af9583, type: 2}
   - {fileID: 11400000, guid: c4fa7fedb980670499a2ab0f852eaef2, type: 2}
   - {fileID: 11400000, guid: 8008fc867f740ba4e81cb29e4c2f2746, type: 2}
-  - {fileID: 11400000, guid: d680dbd7c6fe7294086c196690253301, type: 2}
+  - {fileID: 11400000, guid: 742a58ba78fd1e54f987c68ff26b02ce, type: 2}
   tempsPerColor: 10
   currentRound: 0
 --- !u!4 &361524306
@@ -3252,7 +3252,7 @@ MonoBehaviour:
     - {fileID: 11400000, guid: c232a44787cb8504d8d7ec58e852e1a9, type: 2}
     - {fileID: 11400000, guid: 4968957ff1c90404db41c1ad66ab689d, type: 2}
     maxSargantanas: 14
-    tempsRonda: 120
+    tempsRonda: 10
     speed: 2
     playerSpawnPoint: {fileID: 1564054101}
     hudPrefabRonda: {fileID: 8156581903109089875}
@@ -3871,6 +3871,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imagen: {fileID: 1480104027}
+  segonesAbansFinal: 3
+  velocitateParpadeo: 3
 --- !u!64 &1486402555
 MeshCollider:
   m_ObjectHideFlags: 0

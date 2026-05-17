@@ -4,6 +4,8 @@ using UnityEngine.UI;
 public class ColorActiuIndicator : MonoBehaviour
 {
     [SerializeField] private Image imagen;
+    [SerializeField] private float segonesAbansFinal = 3f;
+    [SerializeField] private float velocitateParpadeo = 3f; // parpadeos per segon
 
     private void Awake()
     {
@@ -13,20 +15,24 @@ public class ColorActiuIndicator : MonoBehaviour
 
     private void Update()
     {
-        if (VisualDracColor.Instance == null) return;
+        if (VisualDracColor.Instance == null) { SetAlpha(0f); return; }
 
         ColorSO colorActiu = VisualDracColor.Instance.ColorActiu;
-        if (colorActiu != null)
-        {
-            Color c = colorActiu.color;
-            c.a = 1f;
-            imagen.color = c;
-            SetAlpha(1f);
-        }
-        else
+        float tempsRestant = VisualDracColor.Instance.TempsRestantColor;
+
+        if (colorActiu == null || tempsRestant > segonesAbansFinal)
         {
             SetAlpha(0f);
+            return;
         }
+
+        // Últims 3 segons — parpadeo suau amb sin
+        Color c = colorActiu.color;
+        c.a = 1f;
+        imagen.color = c;
+
+        float alpha = (Mathf.Sin(Time.time * velocitateParpadeo * Mathf.PI) + 1f) / 2f;
+        SetAlpha(alpha);
     }
 
     private void SetAlpha(float alpha)

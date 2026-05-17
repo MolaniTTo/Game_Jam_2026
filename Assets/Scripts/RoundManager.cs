@@ -111,6 +111,12 @@ public class RoundManager : MonoBehaviour
         TutorialEntry entryAMostrar = (primerCop || config.tutorialEntryRetry == null)
             ? config.tutorialEntry
             : config.tutorialEntryRetry;
+        string musicaTutorial = (primerCop || config.tutorialEntryRetry == null)
+            ? "TutorialDialogue"
+            : "TutorialFailed";
+        AudioManager.Instance.PlayMusic(musicaTutorial, 1f);
+
+        tutorialSequencer.StartRonda(entryAMostrar, OnTutorialAcabat);
 
         tutorialSequencer.StartRonda(entryAMostrar, OnTutorialAcabat);
     }
@@ -149,6 +155,7 @@ public class RoundManager : MonoBehaviour
         dracSpawner.StartSpawning();
         tempsRestant.StartTimer();
         visualDracColor.IniciarCicle();
+        AudioManager.Instance.PlayMusic("Base" , 2f);
     }
 
     // Cridat per WhatColorAmI quan una peça es pinta correctament
@@ -161,6 +168,7 @@ public class RoundManager : MonoBehaviour
     {
         if (!rondaActiva || transitant) return;
         transitant = true;
+        AudioManager.Instance.StopMusic(1f);
         StartCoroutine(TransicioRonda(completada: false));
     }
 
@@ -168,6 +176,7 @@ public class RoundManager : MonoBehaviour
     {
         if (!rondaActiva || transitant) return;
         transitant = true;
+        AudioManager.Instance.StopMusic(1f);
         StartCoroutine(TransicioRonda(completada: true));
     }
 
@@ -206,6 +215,7 @@ public class RoundManager : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
+        AudioManager.Instance.PlayMusic("Win", 1f);
         // Ara arranca el diàleg final
         TutorialEntry entryFinal = config.tutorialEntry;
         tutorialSequencer.StartRonda(entryFinal, () =>

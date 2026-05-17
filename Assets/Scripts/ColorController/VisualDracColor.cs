@@ -29,6 +29,8 @@ public class VisualDracColor : MonoBehaviour
     private int indexColorActiu = -1;
     private Coroutine cicleCoroutine;
 
+    public float TempsRestantColor { get; private set; }
+
     private void Awake()
     {
         if (Instance != null) { Destroy(gameObject); return; }
@@ -125,6 +127,7 @@ public class VisualDracColor : MonoBehaviour
             if (contornColor != null)
                 contornColor.IniciarParpadeo(ColorActiu.color, tempsPerColor);
 
+            TempsRestantColor = tempsPerColor;
             // Parpadeo progressiu durant tot el temps del color
             yield return StartCoroutine(FaseParpadeoProgressiu(ColorActiu));
 
@@ -144,13 +147,11 @@ public class VisualDracColor : MonoBehaviour
 
         while (elapsed < tempsPerColor)
         {
-            // t va de 0 (inici) a 1 (final) — com més t, més ràpid
-            float t = elapsed / tempsPerColor;
+            TempsRestantColor = tempsPerColor - elapsed; // <-- afegeix això
 
-            // Interval actual interpolat entre lent i ràpid
+            float t = elapsed / tempsPerColor;
             float intervalActual = Mathf.Lerp(intervalInici, intervalFinal, t);
 
-            // Alterna visible/invisible
             visible = !visible;
             Color colorVisual = visible ? ColorMesClar(colorActiu.color, alphaAjuda) : Color.white;
             SetColorPeces(colorActiu, colorVisual);
@@ -160,7 +161,7 @@ public class VisualDracColor : MonoBehaviour
             elapsed += intervalActual;
         }
 
-        // Assegura que acabi visible
+        TempsRestantColor = 0f;
         SetColorPeces(colorActiu, ColorMesClar(colorActiu.color, alphaAjuda));
         SetLlums(true, colorActiu.color);
     }

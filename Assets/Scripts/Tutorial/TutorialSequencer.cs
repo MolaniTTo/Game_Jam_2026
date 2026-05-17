@@ -51,6 +51,7 @@ public class TutorialSequencer : MonoBehaviour
 
     private IEnumerator TutorialSequence(TutorialEntry entry, Transform playerTransform)
     {
+        AudioManager.Instance.PlayMusic("TutorialMusic", 1f);
         if (sargantanaTutorial != null)
         {
             sargantanaTutorial.transform.position = sargantanaStartPos;

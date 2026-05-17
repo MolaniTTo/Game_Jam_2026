@@ -45,6 +45,7 @@ public class MenuDePausaScript : MonoBehaviour
     {
         panel.SetActive(true);
         player.isOnMenuMode = true;
+        AudioManager.Instance.StopMusic(1f);
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
     }
@@ -53,6 +54,7 @@ public class MenuDePausaScript : MonoBehaviour
     {
         panel.SetActive(false);
         player.isOnMenuMode = false;
+        AudioManager.Instance.PlayMusic("Base");
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
     }
