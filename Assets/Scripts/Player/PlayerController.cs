@@ -98,56 +98,60 @@ public class PlayerController : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
             RaycastHit hit;
 
-            if (Physics.SphereCast(ray.origin, sphereRadius, ray.direction, out hit, pickupRange, pickupLayerMask) && !sargantanaAgafada)
+            if (sargantanaAgafada)
             {
-                if (hit.collider.CompareTag("sargantana"))
+                // PRIORIDAD 1: Si tenemos sargantana, intentar pintar escultura
+                // Raycast preciso y más largo que el pickup
+                float paintRange = pickupRange * 2.5f;
+                if (Physics.Raycast(ray.origin, ray.direction, out hit, paintRange, scultureMask))
                 {
-                    Drac drac = hit.collider.gameObject.GetComponent<Drac>();
-                    if (drac != null)
-                        colorPicked.DragonPicked(drac);
-                    Recollir(hit.collider.gameObject);
-                }
-            }
+                    if (hit.collider.CompareTag("sculture"))
+                    {
+                        WhatColorAmI whatColor = hit.collider.gameObject.GetComponent<WhatColorAmI>();
+                        if (whatColor != null)
+                        {
+                            bool eraPintada = whatColor.IsPainted;
+                            whatColor.TryPaint(colorPicked.colorSO);
+                            audioSource.PlayOneShot(paintSound);
 
-            if (!sargantanaAgafada)
+                            if (whatColor.IsPainted && !eraPintada)
+                            {
+                                ParticleSystem ps = Instantiate(particulesImpacteCorrecte, hit.point, Quaternion.LookRotation(hit.normal));
+                                var main = ps.main;
+                                main.startColor = whatColor.GetValidColor().color;
+                                ps.Play();
+                                Destroy(ps.gameObject, ps.main.duration + ps.main.startLifetime.constantMax);
+                            }
+
+                            Soltar();
+                        }
+                    }
+                }
+                // Si tenemos sargantana pero no apuntamos a escultura: no pasa nada
+            }
+            else
             {
+                // PRIORIDAD 2: Sin sargantana, intentar recoger con SphereCast
+                if (Physics.SphereCast(ray.origin, sphereRadius, ray.direction, out hit, pickupRange, pickupLayerMask))
+                {
+                    if (hit.collider.CompareTag("sargantana"))
+                    {
+                        Drac drac = hit.collider.gameObject.GetComponent<Drac>();
+                        if (drac != null)
+                            colorPicked.DragonPicked(drac);
+                        Recollir(hit.collider.gameObject);
+                        return; // Salimos para no ejecutar el manotazo
+                    }
+                }
+
+                // PRIORIDAD 3: Manotazo si no hay nada que recoger
                 manotazo.Ejecutar();
                 audioSource.PlayOneShot(handSound);
             }
-
-            if (Physics.SphereCast(ray.origin, sphereRadius, ray.direction, out hit, pickupRange, scultureMask) && sargantanaAgafada && isOnPaintZone)
-            {
-                if (hit.collider.CompareTag("sculture"))
-                {
-                    WhatColorAmI whatColor = hit.collider.gameObject.GetComponent<WhatColorAmI>();
-                    if (whatColor != null)
-                    {
-                        bool eraPintada = whatColor.IsPainted; 
-                        whatColor.TryPaint(colorPicked.colorSO);
-                        audioSource.PlayOneShot(paintSound);
-
-                        if (whatColor.IsPainted && !eraPintada)
-                        {
-                            ParticleSystem ps = Instantiate(particulesImpacteCorrecte, hit.point, Quaternion.LookRotation(hit.normal));
-                            
-                            var main = ps.main;
-                            main.startColor = whatColor.GetValidColor().color;
-
-                            ps.Play();
-                            Destroy(ps.gameObject, ps.main.duration + ps.main.startLifetime.constantMax);
-                        }
-
-                        Soltar();
-                    }
-                }
-            }
         }
-        if(Mouse.current.rightButton.wasPressedThisFrame && !isOnPaintZone && tutorialDone && sargantanaAgafada)
-        {
-            Debug.Log("");
-            Soltar();
-        }
-        else if (Mouse.current.leftButton.wasPressedThisFrame && isOnPaintZone && tutorialDone && sargantanaAgafada)
+
+        // Click derecho: soltar en cualquier situación
+        if (Mouse.current.rightButton.wasPressedThisFrame && tutorialDone && sargantanaAgafada)
         {
             Soltar();
         }
