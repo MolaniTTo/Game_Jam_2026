@@ -40,7 +40,7 @@ public class MenuDePausaScript : MonoBehaviour
             }
         }
     }
-    
+
     void Pausa()
     {
         panel.SetActive(true);
@@ -48,6 +48,7 @@ public class MenuDePausaScript : MonoBehaviour
         AudioManager.Instance.StopMusic(1f);
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true; // AÑADIR
     }
 
     void Resumen()
@@ -57,6 +58,7 @@ public class MenuDePausaScript : MonoBehaviour
         AudioManager.Instance.PlayMusic("Base");
         Time.timeScale = 1f;
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false; // AÑADIR
     }
 
     void Sortir()
